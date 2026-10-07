@@ -1,0 +1,79 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# ==========================================
+# Project-Specific Exclusions
+# ==========================================
+
+# Secrets & Local Environment Configs
+.env
+.env.production
+.env.local
+.env.*.local
+secrets.h
+
+# MATLAB Generated files
+*.asv
+*.mat
+*.slx
+.matlab/
+Work/
+html/
+
+# Unity Generated files and folders
+/[Uu]nity/[Ll]ibrary/
+/[Uu]nity/[Tt]emp/
+/[Uu]nity/[Oo]bj/
+/[Uu]nity/[叠]uild/
+/[Uu]nity/[叠]uilds/
+/[Uu]nity/[Logs]/
+/[Uu]nity/[MemoryCaptures]/
+*.[Cc][Ss].csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*Grid.cs
+
+# FreeCAD & OS backup artifacts
+*~
+*.bak
+.DS_Store
+Thumbs.db
+*.FCStd1
+*.FCWorkspace

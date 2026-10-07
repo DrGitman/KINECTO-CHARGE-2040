@@ -1,0 +1,28 @@
+# ==============================================================================
+# CODEOWNERS - Automatic Code Review Assignments
+# Subsystem changes request review from their responsible lead.
+# ==============================================================================
+
+# Global fallback: shared changes require review from the whole team.
+*                               @Elina-Petrus @DrGitman @Tuilika @1Cansa
+
+# Attendance
+/docs/hci/attendance/           @Elina-Petrus
+/attendance/                    @Elina-Petrus
+
+# Energy and simulation
+/simulation/                    @DrGitman
+/hardware/                      @DrGitman
+/design/ui-energy/              @DrGitman
+
+# Jacket and enclosure
+/cad/                           @Tuilika
+/design/jacket/                 @Tuilika
+/docs/hci/wearability/          @Tuilika
+
+# Thermal and firmware
+/firmware/                      @1Cansa
+/design/ui-thermal/             @1Cansa
+
+# Repository infrastructure
+/.github/                       @Elina-Petrus
