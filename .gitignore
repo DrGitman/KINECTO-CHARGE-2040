@@ -1,79 +1,82 @@
-# Prerequisites
-*.d
+# ==========================================================
+# Kinecto Charge 2040 .gitignore
+# Git root = "Kinecto Charge Project"; Unity lives in Kinecto_Virtual_Lab/
+# ==========================================================
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# ---------- Unity: auto-generated, NEVER commit ----------
+Kinecto_Virtual_Lab/[Ll]ibrary/
+Kinecto_Virtual_Lab/[Tt]emp/
+Kinecto_Virtual_Lab/[Oo]bj/
+Kinecto_Virtual_Lab/[Bb]uild/
+Kinecto_Virtual_Lab/[Bb]uilds/
+Kinecto_Virtual_Lab/[Ll]ogs/
+Kinecto_Virtual_Lab/[Uu]serSettings/
+Kinecto_Virtual_Lab/[Mm]emoryCaptures/
+Kinecto_Virtual_Lab/[Rr]ecordings/
+Kinecto_Virtual_Lab/[Ee]xported[Oo]bj/
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# ==========================================
-# Project-Specific Exclusions
-# ==========================================
-
-# Secrets & Local Environment Configs
-.env
-.env.production
-.env.local
-.env.*.local
-secrets.h
-
-# MATLAB Generated files
-*.asv
-*.mat
-*.slx
-.matlab/
-Work/
-html/
-
-# Unity Generated files and folders
-/[Uu]nity/[Ll]ibrary/
-/[Uu]nity/[Tt]emp/
-/[Uu]nity/[Oo]bj/
-/[Uu]nity/[叠]uild/
-/[Uu]nity/[叠]uilds/
-/[Uu]nity/[Logs]/
-/[Uu]nity/[MemoryCaptures]/
-*.[Cc][Ss].csproj
+# ---------- Unity generated project / IDE files ----------
+*.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
-*.tmp
 *.user
 *.userprefs
 *.pidb
 *.booproj
 *.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+sysinfo.txt
+crashlytics-build.properties
 *Grid.cs
 
-# FreeCAD & OS backup artifacts
+# ---------- Unity build outputs ----------
+*.apk
+*.aab
+*.unitypackage
+
+# ---------- Plastic SCM metadata ----------
+.plastic/
+*.[Pp]rivate
+~UnityDirMonSyncFile~*
+
+# ---------- Python (simulation/) ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ---------- MATLAB generated ----------
+*.asv
+.matlab/
+Work/
+html/
+
+# ---------- Secrets & local config ----------
+.env
+.env.*
+!.env.example
+secrets.h
+
+# ---------- CAD / hardware artifacts ----------
 *~
 *.bak
-.DS_Store
-Thumbs.db
 *.FCStd1
 *.FCWorkspace
+
+# ---------- OS / editor junk ----------
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vs/
+.idea/
+.vscode/
+*.tmp
