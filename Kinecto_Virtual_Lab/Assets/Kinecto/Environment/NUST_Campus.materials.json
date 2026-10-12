@@ -1,0 +1,1077 @@
+{
+ "material": "M_ENV_Ground.007",
+ "shader": "Universal Render Pipeline/Lit",
+ "textures": {
+  "BaseColor": "T_CampusPalette_BaseColor.png",
+  "MaskMap": "T_CampusPalette_MaskMap.png",
+  "Emission": "T_CampusPalette_Emission.png"
+ },
+ "maskmap_layout": "R=metallic G=occlusion B=unused A=smoothness",
+ "cells": [
+  {
+   "cell": 0,
+   "name": "concrete",
+   "baseColor": "#E8E6E1",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.95
+   ]
+  },
+  {
+   "cell": 1,
+   "name": "concrete_grey",
+   "baseColor": "#B8BCC1",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.95
+   ]
+  },
+  {
+   "cell": 2,
+   "name": "panel_dark",
+   "baseColor": "#2F3540",
+   "metallic": 0.0,
+   "smoothness": 0.4,
+   "roughness": 0.6,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.95
+   ]
+  },
+  {
+   "cell": 3,
+   "name": "glass",
+   "baseColor": "#7FAFC2",
+   "metallic": 0.1,
+   "smoothness": 0.92,
+   "roughness": 0.08,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.95
+   ]
+  },
+  {
+   "cell": 4,
+   "name": "glass_dark",
+   "baseColor": "#34525F",
+   "metallic": 0.1,
+   "smoothness": 0.9,
+   "roughness": 0.1,
+   "emission": 0.0,
+   "uv_center": [
+    0.5625,
+    0.95
+   ]
+  },
+  {
+   "cell": 5,
+   "name": "alu",
+   "baseColor": "#8E949A",
+   "metallic": 1.0,
+   "smoothness": 0.65,
+   "roughness": 0.35,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.95
+   ]
+  },
+  {
+   "cell": 6,
+   "name": "paving",
+   "baseColor": "#DAD5C9",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.95
+   ]
+  },
+  {
+   "cell": 7,
+   "name": "paving_dark",
+   "baseColor": "#ADA79A",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.95
+   ]
+  },
+  {
+   "cell": 8,
+   "name": "grass",
+   "baseColor": "#86B84A",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.85
+   ]
+  },
+  {
+   "cell": 9,
+   "name": "grass_dark",
+   "baseColor": "#5E8F35",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.85
+   ]
+  },
+  {
+   "cell": 10,
+   "name": "leaf",
+   "baseColor": "#A6C93F",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.85
+   ]
+  },
+  {
+   "cell": 11,
+   "name": "leaf_yellow",
+   "baseColor": "#D4D441",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.85
+   ]
+  },
+  {
+   "cell": 12,
+   "name": "trunk",
+   "baseColor": "#6B4A2E",
+   "metallic": 0.0,
+   "smoothness": 0.2,
+   "roughness": 0.8,
+   "emission": 0.0,
+   "uv_center": [
+    0.5625,
+    0.85
+   ]
+  },
+  {
+   "cell": 13,
+   "name": "water",
+   "baseColor": "#6CC5DE",
+   "metallic": 0.0,
+   "smoothness": 0.95,
+   "roughness": 0.05,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.85
+   ]
+  },
+  {
+   "cell": 14,
+   "name": "brick",
+   "baseColor": "#A85C38",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.85
+   ]
+  },
+  {
+   "cell": 15,
+   "name": "navy",
+   "baseColor": "#1F2B4B",
+   "metallic": 0.0,
+   "smoothness": 0.4,
+   "roughness": 0.6,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.85
+   ]
+  },
+  {
+   "cell": 16,
+   "name": "gold",
+   "baseColor": "#E2A33B",
+   "metallic": 0.3,
+   "smoothness": 0.6,
+   "roughness": 0.4,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.75
+   ]
+  },
+  {
+   "cell": 17,
+   "name": "red",
+   "baseColor": "#C0282E",
+   "metallic": 0.0,
+   "smoothness": 0.4,
+   "roughness": 0.6,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.75
+   ]
+  },
+  {
+   "cell": 18,
+   "name": "wood",
+   "baseColor": "#B8814E",
+   "metallic": 0.0,
+   "smoothness": 0.3,
+   "roughness": 0.7,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.75
+   ]
+  },
+  {
+   "cell": 19,
+   "name": "wood_dark",
+   "baseColor": "#7A5232",
+   "metallic": 0.0,
+   "smoothness": 0.3,
+   "roughness": 0.7,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.75
+   ]
+  },
+  {
+   "cell": 20,
+   "name": "seat",
+   "baseColor": "#CFCAC2",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.5625,
+    0.75
+   ]
+  },
+  {
+   "cell": 21,
+   "name": "seat_dark",
+   "baseColor": "#9E978C",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.75
+   ]
+  },
+  {
+   "cell": 22,
+   "name": "carpet",
+   "baseColor": "#5B6E85",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.75
+   ]
+  },
+  {
+   "cell": 23,
+   "name": "desk",
+   "baseColor": "#2B2E34",
+   "metallic": 0.0,
+   "smoothness": 0.5,
+   "roughness": 0.5,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.75
+   ]
+  },
+  {
+   "cell": 24,
+   "name": "chair",
+   "baseColor": "#3C4048",
+   "metallic": 0.0,
+   "smoothness": 0.4,
+   "roughness": 0.6,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.65
+   ]
+  },
+  {
+   "cell": 25,
+   "name": "screen",
+   "baseColor": "#F3F4F5",
+   "metallic": 0.0,
+   "smoothness": 0.5,
+   "roughness": 0.5,
+   "emission": 0.25,
+   "uv_center": [
+    0.1875,
+    0.65
+   ]
+  },
+  {
+   "cell": 26,
+   "name": "monitor_glow",
+   "baseColor": "#7FB6E8",
+   "metallic": 0.0,
+   "smoothness": 0.7,
+   "roughness": 0.3,
+   "emission": 0.8,
+   "uv_center": [
+    0.3125,
+    0.65
+   ]
+  },
+  {
+   "cell": 27,
+   "name": "lamp",
+   "baseColor": "#FFE9B8",
+   "metallic": 0.0,
+   "smoothness": 0.5,
+   "roughness": 0.5,
+   "emission": 3.0,
+   "uv_center": [
+    0.4375,
+    0.65
+   ]
+  },
+  {
+   "cell": 28,
+   "name": "led_green",
+   "baseColor": "#2BE36B",
+   "metallic": 0.0,
+   "smoothness": 0.7,
+   "roughness": 0.3,
+   "emission": 4.0,
+   "uv_center": [
+    0.5625,
+    0.65
+   ]
+  },
+  {
+   "cell": 29,
+   "name": "asphalt",
+   "baseColor": "#4B4D52",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.65
+   ]
+  },
+  {
+   "cell": 30,
+   "name": "line_yellow",
+   "baseColor": "#E9C64A",
+   "metallic": 0.0,
+   "smoothness": 0.2,
+   "roughness": 0.8,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.65
+   ]
+  },
+  {
+   "cell": 31,
+   "name": "sand",
+   "baseColor": "#D2B583",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.65
+   ]
+  },
+  {
+   "cell": 32,
+   "name": "hill",
+   "baseColor": "#B98E5E",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.55
+   ]
+  },
+  {
+   "cell": 33,
+   "name": "roof_red",
+   "baseColor": "#B4513A",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.55
+   ]
+  },
+  {
+   "cell": 34,
+   "name": "black",
+   "baseColor": "#1C1C1E",
+   "metallic": 0.0,
+   "smoothness": 0.4,
+   "roughness": 0.6,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.55
+   ]
+  },
+  {
+   "cell": 35,
+   "name": "white",
+   "baseColor": "#F7F7F5",
+   "metallic": 0.0,
+   "smoothness": 0.2,
+   "roughness": 0.8,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.55
+   ]
+  },
+  {
+   "cell": 36,
+   "name": "led_orange",
+   "baseColor": "#FF9A2E",
+   "metallic": 0.0,
+   "smoothness": 0.6,
+   "roughness": 0.4,
+   "emission": 2.5,
+   "uv_center": [
+    0.5625,
+    0.55
+   ]
+  },
+  {
+   "cell": 37,
+   "name": "stone",
+   "baseColor": "#BDB6A8",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.55
+   ]
+  },
+  {
+   "cell": 38,
+   "name": "hill_dark",
+   "baseColor": "#8E6B47",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.55
+   ]
+  },
+  {
+   "cell": 39,
+   "name": "glass_tint",
+   "baseColor": "#5F8FA0",
+   "metallic": 0.1,
+   "smoothness": 0.9,
+   "roughness": 0.1,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.55
+   ]
+  },
+  {
+   "cell": 40,
+   "name": "cloud",
+   "baseColor": "#FBF7F2",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.45
+   ]
+  },
+  {
+   "cell": 41,
+   "name": "car_blue",
+   "baseColor": "#3D5C8C",
+   "metallic": 0.4,
+   "smoothness": 0.6,
+   "roughness": 0.4,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.45
+   ]
+  },
+  {
+   "cell": 42,
+   "name": "car_red",
+   "baseColor": "#A8332E",
+   "metallic": 0.4,
+   "smoothness": 0.6,
+   "roughness": 0.4,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.45
+   ]
+  },
+  {
+   "cell": 43,
+   "name": "solar",
+   "baseColor": "#24324A",
+   "metallic": 0.6,
+   "smoothness": 0.8,
+   "roughness": 0.2,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.45
+   ]
+  },
+  {
+   "cell": 44,
+   "name": "line_white",
+   "baseColor": "#F2F2F2",
+   "metallic": 0.0,
+   "smoothness": 0.2,
+   "roughness": 0.8,
+   "emission": 0.0,
+   "uv_center": [
+    0.5625,
+    0.45
+   ]
+  },
+  {
+   "cell": 45,
+   "name": "hill_far",
+   "baseColor": "#C9A68A",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.45
+   ]
+  },
+  {
+   "cell": 46,
+   "name": "tree_dark",
+   "baseColor": "#4E7E2F",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.45
+   ]
+  },
+  {
+   "cell": 47,
+   "name": "sculpt",
+   "baseColor": "#3A3F47",
+   "metallic": 0.5,
+   "smoothness": 0.6,
+   "roughness": 0.4,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.45
+   ]
+  },
+  {
+   "cell": 48,
+   "name": "carpet_grey",
+   "baseColor": "#4A4F57",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.35
+   ]
+  },
+  {
+   "cell": 49,
+   "name": "beige",
+   "baseColor": "#E3C796",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.35
+   ]
+  },
+  {
+   "cell": 50,
+   "name": "beige_dark",
+   "baseColor": "#C9A574",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.35
+   ]
+  },
+  {
+   "cell": 51,
+   "name": "seat_blue",
+   "baseColor": "#3F7DB5",
+   "metallic": 0.0,
+   "smoothness": 0.4,
+   "roughness": 0.6,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.35
+   ]
+  },
+  {
+   "cell": 52,
+   "name": "seat_blue_dark",
+   "baseColor": "#2F5F8C",
+   "metallic": 0.0,
+   "smoothness": 0.4,
+   "roughness": 0.6,
+   "emission": 0.0,
+   "uv_center": [
+    0.5625,
+    0.35
+   ]
+  },
+  {
+   "cell": 53,
+   "name": "screen_orange",
+   "baseColor": "#F2A23A",
+   "metallic": 0.0,
+   "smoothness": 0.7,
+   "roughness": 0.3,
+   "emission": 0.8,
+   "uv_center": [
+    0.6875,
+    0.35
+   ]
+  },
+  {
+   "cell": 54,
+   "name": "server",
+   "baseColor": "#22262B",
+   "metallic": 0.3,
+   "smoothness": 0.5,
+   "roughness": 0.5,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.35
+   ]
+  },
+  {
+   "cell": 55,
+   "name": "led_blue",
+   "baseColor": "#3FA9F5",
+   "metallic": 0.0,
+   "smoothness": 0.7,
+   "roughness": 0.3,
+   "emission": 3.0,
+   "uv_center": [
+    0.9375,
+    0.35
+   ]
+  },
+  {
+   "cell": 56,
+   "name": "pot",
+   "baseColor": "#D9D2C5",
+   "metallic": 0.0,
+   "smoothness": 0.2,
+   "roughness": 0.8,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.25
+   ]
+  },
+  {
+   "cell": 57,
+   "name": "crt",
+   "baseColor": "#E9E2CF",
+   "metallic": 0.0,
+   "smoothness": 0.3,
+   "roughness": 0.7,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.25
+   ]
+  },
+  {
+   "cell": 58,
+   "name": "door_wood",
+   "baseColor": "#C08A55",
+   "metallic": 0.0,
+   "smoothness": 0.3,
+   "roughness": 0.7,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.25
+   ]
+  },
+  {
+   "cell": 59,
+   "name": "floor_warm",
+   "baseColor": "#9A9188",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.25
+   ]
+  },
+  {
+   "cell": 60,
+   "name": "crystal",
+   "baseColor": "#9FD3F0",
+   "metallic": 0.2,
+   "smoothness": 0.8,
+   "roughness": 0.2,
+   "emission": 0.4,
+   "uv_center": [
+    0.5625,
+    0.25
+   ]
+  },
+  {
+   "cell": 61,
+   "name": "timber",
+   "baseColor": "#8C6A4A",
+   "metallic": 0.0,
+   "smoothness": 0.25,
+   "roughness": 0.75,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.25
+   ]
+  },
+  {
+   "cell": 62,
+   "name": "jacaranda",
+   "baseColor": "#8E6BBF",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.25
+   ]
+  },
+  {
+   "cell": 63,
+   "name": "roof_grey",
+   "baseColor": "#8D9399",
+   "metallic": 0.4,
+   "smoothness": 0.5,
+   "roughness": 0.5,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.25
+   ]
+  },
+  {
+   "cell": 64,
+   "name": "wall_beige",
+   "baseColor": "#E8DCC0",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.15
+   ]
+  },
+  {
+   "cell": 65,
+   "name": "wall_pastel",
+   "baseColor": "#D9C7A0",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.15
+   ]
+  },
+  {
+   "cell": 66,
+   "name": "dry_grass",
+   "baseColor": "#C2B07A",
+   "metallic": 0.0,
+   "smoothness": 0.05,
+   "roughness": 0.95,
+   "emission": 0.0,
+   "uv_center": [
+    0.3125,
+    0.15
+   ]
+  },
+  {
+   "cell": 67,
+   "name": "bronze",
+   "baseColor": "#9C7A3C",
+   "metallic": 0.8,
+   "smoothness": 0.65,
+   "roughness": 0.35,
+   "emission": 0.0,
+   "uv_center": [
+    0.4375,
+    0.15
+   ]
+  },
+  {
+   "cell": 68,
+   "name": "sandstone",
+   "baseColor": "#D8C7A2",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.5625,
+    0.15
+   ]
+  },
+  {
+   "cell": 69,
+   "name": "ochre",
+   "baseColor": "#D9A25F",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.15
+   ]
+  },
+  {
+   "cell": 70,
+   "name": "palm",
+   "baseColor": "#5E8C3A",
+   "metallic": 0.0,
+   "smoothness": 0.15,
+   "roughness": 0.85,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.15
+   ]
+  },
+  {
+   "cell": 71,
+   "name": "wall_white",
+   "baseColor": "#F1EEE6",
+   "metallic": 0.0,
+   "smoothness": 0.1,
+   "roughness": 0.9,
+   "emission": 0.0,
+   "uv_center": [
+    0.9375,
+    0.15
+   ]
+  },
+  {
+   "cell": 72,
+   "name": "glass_blue",
+   "baseColor": "#4F7FA6",
+   "metallic": 0.3,
+   "smoothness": 0.9,
+   "roughness": 0.1,
+   "emission": 0.0,
+   "uv_center": [
+    0.0625,
+    0.05
+   ]
+  },
+  {
+   "cell": 73,
+   "name": "road_marking",
+   "baseColor": "#EDEDED",
+   "metallic": 0.0,
+   "smoothness": 0.2,
+   "roughness": 0.8,
+   "emission": 0.0,
+   "uv_center": [
+    0.1875,
+    0.05
+   ]
+  },
+  {
+   "cell": 74,
+   "name": "cyan_glow",
+   "baseColor": "#5CE1E6",
+   "metallic": 0.0,
+   "smoothness": 0.7,
+   "roughness": 0.3,
+   "emission": 2.5,
+   "uv_center": [
+    0.3125,
+    0.05
+   ]
+  },
+  {
+   "cell": 75,
+   "name": "holo",
+   "baseColor": "#7FE9F0",
+   "metallic": 0.0,
+   "smoothness": 0.8,
+   "roughness": 0.2,
+   "emission": 1.0,
+   "uv_center": [
+    0.4375,
+    0.05
+   ]
+  },
+  {
+   "cell": 76,
+   "name": "tile",
+   "baseColor": "#DDE1E4",
+   "metallic": 0.0,
+   "smoothness": 0.65,
+   "roughness": 0.35,
+   "emission": 0.0,
+   "uv_center": [
+    0.5625,
+    0.05
+   ]
+  },
+  {
+   "cell": 77,
+   "name": "steel",
+   "baseColor": "#59626B",
+   "metallic": 0.6,
+   "smoothness": 0.55,
+   "roughness": 0.45,
+   "emission": 0.0,
+   "uv_center": [
+    0.6875,
+    0.05
+   ]
+  },
+  {
+   "cell": 78,
+   "name": "robot_white",
+   "baseColor": "#ECEFF1",
+   "metallic": 0.0,
+   "smoothness": 0.55,
+   "roughness": 0.45,
+   "emission": 0.0,
+   "uv_center": [
+    0.8125,
+    0.05
+   ]
+  }
+ ],
+ "decals": {
+  "DECAL_Gate_Sign": "M_T_Sign_NUST_Navy",
+  "DECAL_Gate_Sign_Back": "M_T_Sign_NUST_Navy",
+  "DECAL_Gate_Logo": "M_T_Logo_NUST",
+  "DECAL_Facade_Sign": "M_T_Sign_NUST_Facade",
+  "DECAL_Entrance_Sign": "M_T_Sign_NUST_Facade",
+  "DECAL_Card_Sticker": "M_T_CardSticker",
+  "DECAL_Hall_Sign": "M_T_Sign_NUST_Navy",
+  "DECAL_Portal_Sign": "M_T_Sign_NUST_Navy",
+  "DECAL_Card_Sticker_Lab": "M_T_CardSticker",
+  "DECAL_Lab_Sign": "M_T_Sign_NUST_Facade",
+  "SCREEN_Lab_VideoWall": "M_T_Dashboard",
+  "DECAL_Lab_Sign.001": "M_T_Sign_NUST_Facade",
+  "DECAL_Lab_Banner8": "M_T_Banner_NUST",
+  "DECAL_Lab_Banner14": "M_T_Banner_NUST",
+  "DECAL_Lab_Banner20": "M_T_Banner_NUST",
+  "DECAL_Lab_Banner26": "M_T_Banner_NUST",
+  "DECAL_Lab_Banner32": "M_T_Banner_NUST",
+  "DECAL_Card_Sticker_Theatre": "M_T_CardSticker",
+  "DECAL_Theatre_Sign": "M_T_Sign_NUST_Facade",
+  "DECAL_Theatre_Whiteboard": "M_T_Whiteboard",
+  "DECAL_Theatre_Clock": "M_T_Clock",
+  "DECAL_Theatre_LecternLogo": "M_T_Logo_NUST",
+  "DECAL_Hub_CardSticker": "M_T_CardSticker",
+  "DECAL_Hub_FacadeSign": "M_T_Sign_KinectoHub",
+  "DECAL_Hub_FacadeSignS": "M_T_Sign_KinectoHub",
+  "DECAL_Hub_DoorSign": "M_T_Sign_HubDoor",
+  "SCREEN_Hub_Holo1": "M_T_Holo",
+  "SCREEN_Hub_Holo2": "M_T_Holo",
+  "SCREEN_Hub_Holo3": "M_T_Holo",
+  "SCREEN_Hub_Holo4": "M_T_Holo",
+  "SCREEN_Hub_HoloRepair": "M_T_Holo",
+  "DECAL_Hub_SignN1": "M_T_Sign_KinectoHub",
+  "DECAL_Hub_SignN2": "M_T_Sign_KinectoHub",
+  "DECAL_Hub_SignW": "M_T_Sign_HubDoor",
+  "DECAL_Hub_Repair": "M_T_Sign_Repair",
+  "DECAL_Hub_Diagnostic": "M_T_Sign_Diagnostic"
+ }
+}
