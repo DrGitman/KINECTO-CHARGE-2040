@@ -1,0 +1,27 @@
+{
+  "_note": "SIMULATED sample of the thermal module log (Wokwi, no physical prototype). The firmware appends one event on every state change or heater/blower change. Comfort sensing of the jacket microclimate only. Values are assumptions.",
+  "_allowed_values": {
+    "state": ["OFF", "AUTO", "COOL", "WARM", "FAULT"],
+    "reason": ["power_on", "mode_button", "mode_hold_2s", "auto_heat_on", "auto_heat_off", "auto_cool_on", "auto_cool_off", "sensor_error", "over_cutoff", "fault_cleared_mode_button"],
+    "fault": [null, "inside_sensor_silent", "ambient_sensor_silent", "heater_over_limit"]
+  },
+  "schema_version": "1.0",
+  "simulated": true,
+  "jacket_id": "KC-SIM-0001",
+  "limits": {
+    "cutoff_c": 42.0,
+    "warm_below_c": 19.0,
+    "cool_above_c": 26.0,
+    "hysteresis_c": 0.7
+  },
+  "events": [
+    { "ts": "2026-10-15T07:30:00Z", "state": "OFF",   "reason": "power_on",                  "inside_c": 18.6, "ambient_c": 13.5, "heater_on": false, "blower_on": false, "fault": null },
+    { "ts": "2026-10-15T07:31:10Z", "state": "AUTO",  "reason": "mode_button",               "inside_c": 18.6, "ambient_c": 13.6, "heater_on": false, "blower_on": false, "fault": null },
+    { "ts": "2026-10-15T07:31:11Z", "state": "AUTO",  "reason": "auto_heat_on",              "inside_c": 18.6, "ambient_c": 13.6, "heater_on": true,  "blower_on": false, "fault": null },
+    { "ts": "2026-10-15T07:52:40Z", "state": "AUTO",  "reason": "auto_heat_off",             "inside_c": 19.8, "ambient_c": 15.2, "heater_on": false, "blower_on": false, "fault": null },
+    { "ts": "2026-10-15T13:05:00Z", "state": "AUTO",  "reason": "auto_cool_on",              "inside_c": 26.1, "ambient_c": 28.4, "heater_on": false, "blower_on": true,  "fault": null },
+    { "ts": "2026-10-15T13:40:15Z", "state": "COOL",  "reason": "mode_button",               "inside_c": 25.6, "ambient_c": 29.1, "heater_on": false, "blower_on": true,  "fault": null },
+    { "ts": "2026-10-15T14:02:30Z", "state": "FAULT", "reason": "sensor_error",              "inside_c": null, "ambient_c": 29.6, "heater_on": false, "blower_on": false, "fault": "inside_sensor_silent" },
+    { "ts": "2026-10-15T14:10:05Z", "state": "OFF",   "reason": "fault_cleared_mode_button", "inside_c": 25.9, "ambient_c": 29.7, "heater_on": false, "blower_on": false, "fault": null }
+  ]
+}
