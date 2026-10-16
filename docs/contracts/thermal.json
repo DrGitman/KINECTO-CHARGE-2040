@@ -2,16 +2,17 @@
   "_note": "SIMULATED sample of the thermal module log (Wokwi, no physical prototype). The firmware appends one event on every state change or heater/blower change. Comfort sensing of the jacket microclimate only. Values are assumptions.",
   "_allowed_values": {
     "state": ["OFF", "AUTO", "COOL", "WARM", "FAULT"],
-    "reason": ["power_on", "mode_button", "mode_hold_2s", "auto_heat_on", "auto_heat_off", "auto_cool_on", "auto_cool_off", "sensor_error", "over_cutoff", "fault_cleared_mode_button"],
+    "reason": ["power_on", "mode_button", "mode_hold_2s", "auto_heat_on", "auto_heat_off", "auto_cool_on", "auto_cool_off", "cool_blower_on", "warm_heat_on", "warm_heat_off", "sensor_error", "over_cutoff", "fault_cleared_mode_button"],
     "fault": [null, "inside_sensor_silent", "ambient_sensor_silent", "heater_over_limit"]
   },
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "simulated": true,
   "jacket_id": "KC-SIM-0001",
   "limits": {
     "cutoff_c": 42.0,
     "warm_below_c": 19.0,
     "cool_above_c": 26.0,
+    "warm_max_c": 30.0,
     "hysteresis_c": 0.7
   },
   "events": [
