@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "author": "Amaury CANSA (Thermal Comfort)",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-c3-devkitm-1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "chip-tmp117",
+      "id": "tmpInside",
+      "top": -144,
+      "left": 220,
+      "attrs": { "temperature": "18.6", "offline": "0" }
+    },
+    {
+      "type": "chip-tmp117",
+      "id": "tmpAmbient",
+      "top": -144,
+      "left": 400,
+      "attrs": { "temperature": "13.5", "offline": "0" }
+    },
+    { "type": "wokwi-resistor", "id": "rSdaPullUp", "top": -220, "left": 120, "rotate": 90, "attrs": { "value": "4700" } },
+    { "type": "wokwi-resistor", "id": "rSclPullUp", "top": -220, "left": 160, "rotate": 90, "attrs": { "value": "4700" } },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnMode",
+      "top": 200,
+      "left": -180,
+      "attrs": { "color": "blue", "label": "MODE" }
+    },
+    { "type": "wokwi-led", "id": "ledHeater", "top": 120, "left": 260, "attrs": { "color": "orange", "label": "HEATER" } },
+    { "type": "wokwi-resistor", "id": "rHeaterLed", "top": 160, "left": 180, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "rHeaterPullDown", "top": 220, "left": 180, "attrs": { "value": "10000" } },
+    { "type": "wokwi-led", "id": "ledBlower", "top": 120, "left": 380, "attrs": { "color": "blue", "label": "BLOWER" } },
+    { "type": "wokwi-resistor", "id": "rBlowerLed", "top": 280, "left": 180, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "rBlowerPullDown", "top": 340, "left": 180, "attrs": { "value": "10000" } }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "esp:6", "tmpInside:SDA", "green", [] ],
+    [ "esp:7", "tmpInside:SCL", "gold", [] ],
+    [ "esp:6", "tmpAmbient:SDA", "green", [] ],
+    [ "esp:7", "tmpAmbient:SCL", "gold", [] ],
+    [ "rSdaPullUp:1", "esp:3V3.1", "red", [] ],
+    [ "rSdaPullUp:2", "esp:6", "green", [] ],
+    [ "rSclPullUp:1", "esp:3V3.1", "red", [] ],
+    [ "rSclPullUp:2", "esp:7", "gold", [] ],
+
+    [ "tmpInside:V+", "esp:3V3.1", "red", [] ],
+    [ "tmpInside:GND", "esp:GND.1", "black", [] ],
+    [ "tmpInside:ADD0", "esp:GND.1", "black", [] ],
+    [ "tmpAmbient:V+", "esp:3V3.1", "red", [] ],
+    [ "tmpAmbient:GND", "esp:GND.1", "black", [] ],
+    [ "tmpAmbient:ADD0", "esp:3V3.1", "red", [] ],
+
+    [ "btnMode:1.l", "esp:4", "blue", [] ],
+    [ "btnMode:2.l", "esp:GND.8", "black", [] ],
+
+    [ "esp:5", "rHeaterLed:1", "orange", [] ],
+    [ "rHeaterLed:2", "ledHeater:A", "orange", [] ],
+    [ "ledHeater:C", "esp:GND.8", "black", [] ],
+    [ "rHeaterPullDown:1", "esp:5", "orange", [] ],
+    [ "rHeaterPullDown:2", "esp:GND.8", "black", [] ],
+
+    [ "esp:10", "rBlowerLed:1", "cyan", [] ],
+    [ "rBlowerLed:2", "ledBlower:A", "cyan", [] ],
+    [ "ledBlower:C", "esp:GND.4", "black", [] ],
+    [ "rBlowerPullDown:1", "esp:10", "cyan", [] ],
+    [ "rBlowerPullDown:2", "esp:GND.4", "black", [] ]
+  ],
+  "dependencies": {}
+}

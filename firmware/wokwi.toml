@@ -1,0 +1,9 @@
+[wokwi]
+version = 1
+firmware = '.pio/build/esp32c3/firmware.bin'
+elf = '.pio/build/esp32c3/firmware.elf'
+
+# Build with wokwi/build_chips.sh before starting the simulation.
+[[chip]]
+name = 'tmp117'
+binary = 'wokwi/chips/tmp117.chip.wasm'

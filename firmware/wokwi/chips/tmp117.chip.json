@@ -1,0 +1,9 @@
+{
+  "name": "TMP117 (SIMULATED)",
+  "author": "Member D (Thermal Comfort)",
+  "pins": ["SCL", "GND", "ALERT", "ADD0", "V+", "SDA"],
+  "controls": [
+    { "id": "temperature", "label": "Temperature (°C)", "type": "range", "min": -10, "max": 50, "step": 0.1 },
+    { "id": "offline", "label": "Sensor offline (0 = online, 1 = offline)", "type": "range", "min": 0, "max": 1, "step": 1 }
+  ]
+}
