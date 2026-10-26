@@ -30,7 +30,8 @@ void SerialLogger::warn(const char* module, const char* message) {
 }
 
 void SerialLogger::write(const char* level, const char* module, const char* message) {
-  out_.printf("[%s] %s: %s\n", level, module, message);
+  out_.printf("[%s] %s: ", level, module);
+  out_.println(message);
 }
 
 SimulatedClock::SimulatedClock(int64_t startEpochSeconds)

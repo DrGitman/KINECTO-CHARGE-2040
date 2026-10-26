@@ -1,0 +1,66 @@
+name: 'Thermal modes and fail-safe (SIMULATED)'
+version: 1
+author: 'Member D (Thermal Comfort)'
+
+# Starts with inside 18.6 °C and ambient 13.5 °C, as set in diagram.json.
+steps:
+  - wait-serial: '"state":"OFF","reason":"power_on"'
+  - expect-pin: { part-id: esp, name: 5, value: 0 }
+  - expect-pin: { part-id: esp, name: 10, value: 0 }
+
+  # OFF -> AUTO: inside is below warm_below_c (19.0), so the heater turns on.
+  - set-control: { part-id: btnMode, name: pressed, value: 1 }
+  - delay: 200ms
+  - set-control: { part-id: btnMode, name: pressed, value: 0 }
+  - wait-serial: '"state":"AUTO","reason":"mode_button"'
+  - wait-serial: '"reason":"auto_heat_on"'
+  - expect-pin: { part-id: esp, name: 5, value: 1 }
+  - expect-pin: { part-id: esp, name: 10, value: 0 }
+
+  # Inside above cool_above_c (26.0): the heater stops and the blower starts, never both.
+  - set-control: { part-id: tmpInside, name: temperature, value: 27 }
+  - wait-serial: '"reason":"auto_cool_on"'
+  - expect-pin: { part-id: esp, name: 5, value: 0 }
+  - expect-pin: { part-id: esp, name: 10, value: 1 }
+
+  # Inside sensor stops answering: three missed reads trip FAULT with both loads off.
+  - set-control: { part-id: tmpInside, name: offline, value: 1 }
+  - wait-serial: '"state":"FAULT","reason":"sensor_error"'
+  - expect-pin: { part-id: esp, name: 5, value: 0 }
+  - expect-pin: { part-id: esp, name: 10, value: 0 }
+
+  # Sensor back online, a short press clears FAULT to OFF.
+  - set-control: { part-id: tmpInside, name: offline, value: 0 }
+  - delay: 1500ms
+  - set-control: { part-id: btnMode, name: pressed, value: 1 }
+  - delay: 200ms
+  - set-control: { part-id: btnMode, name: pressed, value: 0 }
+  - wait-serial: '"reason":"fault_cleared_mode_button"'
+
+  # OFF -> AUTO, then inside at the 42.0 °C cutoff: FAULT always wins.
+  - set-control: { part-id: btnMode, name: pressed, value: 1 }
+  - delay: 200ms
+  - set-control: { part-id: btnMode, name: pressed, value: 0 }
+  - wait-serial: '"state":"AUTO","reason":"mode_button"'
+  - set-control: { part-id: tmpInside, name: temperature, value: 43 }
+  - wait-serial: '"state":"FAULT","reason":"over_cutoff"'
+  - expect-pin: { part-id: esp, name: 5, value: 0 }
+  - expect-pin: { part-id: esp, name: 10, value: 0 }
+
+  # Back under the cutoff, clear FAULT, then a 2 s hold in AUTO returns to OFF.
+  - set-control: { part-id: tmpInside, name: temperature, value: 22 }
+  - delay: 1500ms
+  - set-control: { part-id: btnMode, name: pressed, value: 1 }
+  - delay: 200ms
+  - set-control: { part-id: btnMode, name: pressed, value: 0 }
+  - wait-serial: '"reason":"fault_cleared_mode_button"'
+  - set-control: { part-id: btnMode, name: pressed, value: 1 }
+  - delay: 200ms
+  - set-control: { part-id: btnMode, name: pressed, value: 0 }
+  - wait-serial: '"state":"AUTO","reason":"mode_button"'
+  - set-control: { part-id: btnMode, name: pressed, value: 1 }
+  - delay: 2500ms
+  - wait-serial: '"state":"OFF","reason":"mode_hold_2s"'
+  - set-control: { part-id: btnMode, name: pressed, value: 0 }
+  - expect-pin: { part-id: esp, name: 5, value: 0 }
+  - expect-pin: { part-id: esp, name: 10, value: 0 }
