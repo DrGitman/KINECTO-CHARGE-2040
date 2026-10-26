@@ -7,6 +7,10 @@ abstract final class AppRoutes {
 
   // Comfort is not a tab: it is pushed full screen from the Home tile and from Profile.
   static const String comfort = '/comfort';
+
+  // Fault detail is also full screen, opened from the log, a Home tile or an alert.
+  static const String faultDetail = '/fault/:id';
+  static String faultDetailFor(String faultId) => '/fault/$faultId';
 }
 
 /// Signed-out users always land on sign-in, signed-in users never see it.
