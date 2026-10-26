@@ -1,0 +1,15 @@
+{
+  "_note": "SIMULATED thresholds for the Virtual Lab jacket KC-SIM-0001 (telemetry every 5 s). Comfort only, not medical. Assumptions: normal blower draw about 120 mA, battery 29 to 33 °C in use, 45 °C is the usual LiPo charge limit, cutoff_c and warm_max_c mirror docs/contracts/thermal.json.",
+  "schema_version": "1.0",
+  "simulated": true,
+  "tick_s": 10,
+  "window_s": 600,
+  "rules": {
+    "inside_sensor_silent": { "null_samples": 3 },
+    "heater_over_limit": { "cutoff_c": 42.0, "warm_max_c": 30.0, "over_warm_max_s": 60 },
+    "blower_current_spike": { "max_ma": 500.0, "samples": 2 },
+    "buffer_not_charging": { "moving_activities": ["walk", "brisk", "run"], "min_moving_s": 300 },
+    "battery_hot": { "max_c": 45.0, "samples": 2 },
+    "cuff_tag_unreadable": { "samples": 3 }
+  }
+}
