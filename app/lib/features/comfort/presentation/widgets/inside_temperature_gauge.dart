@@ -34,28 +34,34 @@ class InsideTemperatureGauge extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _ScaleLabel(ComfortLimits.minC),
-          SizedBox.square(
-            dimension: _size,
-            child: CustomPaint(
-              painter: _DialPainter(fraction: _fraction(reading)),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      value,
-                      style: textTheme.headlineMedium?.copyWith(
-                        color: AppColors.navy,
-                        fontWeight: FontWeight.w700,
-                      ),
+          // Shrinks below its board size when larger text widens the scale labels.
+          Flexible(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: _size),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: CustomPaint(
+                  painter: _DialPainter(fraction: _fraction(reading)),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          value,
+                          style: textTheme.headlineMedium?.copyWith(
+                            color: AppColors.navy,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          caption,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: AppColors.navy,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      caption,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: AppColors.navy,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),

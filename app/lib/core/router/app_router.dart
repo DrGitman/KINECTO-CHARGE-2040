@@ -8,7 +8,10 @@ import '../../features/comfort/presentation/comfort_screen.dart';
 import '../../features/faults/presentation/fault_detail_screen.dart';
 import '../../features/faults/presentation/faults_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/profile/presentation/help_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/settings/presentation/notification_settings_screen.dart';
+import '../../features/settings/presentation/theme_settings_screen.dart';
 import '../app_strings.dart';
 import '../widgets/app_shell.dart';
 import '../widgets/placeholder_view.dart';
@@ -37,6 +40,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.comfort,
         builder: (_, _) => const ComfortScreen(),
       ),
+      GoRoute(
+        path: AppRoutes.notificationSettings,
+        builder: (_, _) => const NotificationSettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.themeSettings,
+        builder: (_, _) => const ThemeSettingsScreen(),
+      ),
+      GoRoute(path: AppRoutes.help, builder: (_, _) => const HelpScreen()),
       GoRoute(
         path: AppRoutes.faultDetail,
         builder: (_, state) =>

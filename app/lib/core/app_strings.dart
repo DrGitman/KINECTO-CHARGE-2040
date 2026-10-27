@@ -17,7 +17,6 @@ abstract final class AppStrings {
   static const String openComfortButton = 'Comfort settings';
 
   static const String repairsPlaceholder = 'No repairs yet.';
-  static const String profilePlaceholder = 'Profile and settings coming soon.';
 
   static const String simulated = 'SIMULATED';
   static const String simulatedHint =
@@ -78,4 +77,56 @@ abstract final class AppStrings {
   static const String markResolvedButton = 'I fixed it, mark as resolved';
   static const String faultNotFound = 'This fault is no longer in your log.';
   static const String resolveFailed = 'Could not update this fault. Try again.';
+
+  static const String roleStudent = 'Student';
+  static const String jacketPaired = 'Jacket paired';
+  static const String mockAccount = 'Mock account';
+  static String comfortSummary(String mode, String warm, String cool) =>
+      '$mode · $warm to $cool';
+  static const String notificationsTitle = 'Notifications';
+  static const String notificationsSummary = 'Faults and repair updates';
+  static const String themeTitle = 'Theme';
+  static const String helpTitle = 'Repair card & help';
+  static const String helpSummary = 'How to remove the pod';
+
+  static const String signOutTitle = 'Sign out?';
+  static const String signOutBody =
+      'Your jacket keeps your comfort settings. You can sign back in any time with your NUST email.';
+  static const String cancelButton = 'Cancel';
+
+  static const String faultAlerts = 'Fault alerts';
+  static const String faultAlertsHint = 'Always on for safety faults';
+  static const String repairUpdates = 'Repair updates';
+  static const String repairUpdatesHint = 'Each repair stage';
+  static const String energyTips = 'Energy tips';
+  static const String energyTipsHint = 'Weekly summary';
+  static const String comfortChanges = 'Comfort changes';
+  static const String comfortChangesHint = 'When Auto switches mode';
+  static const String feedbackRequests = 'Feedback requests';
+  static const String feedbackRequestsHint = 'After a repair only';
+  static const String quietHoursNote =
+      'Quiet hours 22:00 to 07:00. Safety alerts still come through.';
+  static const String alertsNotLiveNote =
+      'Saved on this phone. Alerts start once the jacket is linked to Kinecto Care online.';
+
+  static const String themeLight = 'Light';
+  static const String themeDark = 'Dark';
+  static const String matchMyPhone = 'Match my phone';
+  static const String largerText = 'Larger text';
+  static const String reduceMotion = 'Reduce motion';
+
+  static const String repairCardTitle = 'Repair card';
+  static const List<String> repairCardSteps = [
+    'Switch the pod off',
+    'Undo the 4 screws on the lid',
+    'Unplug the labelled connectors',
+    'Lift the pod out; the jacket is now washable',
+  ];
+  static const String howKinectoWorks = 'How Kinecto works';
+  static const String howKinectoWorksBody =
+      'The comfort module warms or cools the inside of your jacket from its own battery. '
+      'Energy from walking only powers the status light and the energy bar. '
+      'It does not charge your phone or run the heater.';
+  static const String contactFabLab = 'Contact the FabLab';
+  static const String fabLabLocation = 'NUST FabLab · Engineering block';
 }
