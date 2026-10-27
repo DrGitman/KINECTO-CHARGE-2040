@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/auth_controller.dart';
 import '../../features/auth/presentation/sign_in_screen.dart';
 import '../../features/comfort/presentation/comfort_screen.dart';
+import '../../features/faults/presentation/fault_detail_screen.dart';
 import '../../features/faults/presentation/faults_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
@@ -35,6 +36,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.comfort,
         builder: (_, _) => const ComfortScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.faultDetail,
+        builder: (_, state) =>
+            FaultDetailScreen(faultId: state.pathParameters['id']!),
       ),
       StatefulShellRoute.indexedStack(
         builder: (_, _, navigationShell) =>

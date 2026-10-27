@@ -16,9 +16,50 @@ abstract final class AppStrings {
   static const String comfortTitle = 'Comfort';
   static const String openComfortButton = 'Comfort settings';
 
-  static const String homePlaceholder = 'Jacket overview coming soon.';
-  static const String faultsPlaceholder = 'No faults to show yet.';
   static const String repairsPlaceholder = 'No repairs yet.';
   static const String profilePlaceholder = 'Profile and settings coming soon.';
   static const String comfortPlaceholder = 'Comfort settings coming soon.';
+
+  static const String simulated = 'SIMULATED';
+  static const String simulatedHint =
+      'Simulated data from the Virtual Lab jacket';
+  static const String loadFailed = 'Could not load your jacket data.';
+  static const String retryButton = 'Try again';
+
+  static const String greetingMorning = 'Good morning';
+  static const String greetingAfternoon = 'Good afternoon';
+  static const String greetingEvening = 'Good evening';
+  static const String heroAllGood = 'Your jacket is looking good';
+  static const String heroOneFault = 'One thing needs your attention';
+  static String heroFaults(int count) => '$count things need your attention';
+  static String pairedJacket(String jacketId) => '$jacketId · paired';
+
+  static const String comfortBatteryLabel = 'Comfort battery';
+  static const String gaugeLow = 'Low';
+  static const String gaugeFull = 'Full';
+  static const String energyBufferTile = 'Energy buffer';
+  static const String comfortTile = 'Comfort';
+  static const String cuffTagTile = 'Cuff tag';
+  static const String openFaultsTile = 'Open faults';
+  static const String cuffReady = 'Ready';
+  static const String cuffNeedsCheck = 'Check tag';
+  static const String modeAuto = 'Auto';
+  static const String modeCool = 'Cool';
+  static const String modeWarm = 'Warm';
+  static const String modeOff = 'Off';
+
+  static const String faultsAll = 'All';
+  static const String previousMonth = 'Previous month';
+  static const String nextMonth = 'Next month';
+  static const String noFaultsThisMonth = 'No faults this month.';
+
+  static const String faultTitle = 'Fault';
+  static const String needsAFix = 'Needs a fix';
+  static const String whatHappened = 'What happened';
+  static const String whatWeDid = 'What we did';
+  static const String whatToDo = 'What to do';
+  static const String bookAFixButton = 'Book a fix';
+  static const String markResolvedButton = 'I fixed it, mark as resolved';
+  static const String faultNotFound = 'This fault is no longer in your log.';
+  static const String resolveFailed = 'Could not update this fault. Try again.';
 }
