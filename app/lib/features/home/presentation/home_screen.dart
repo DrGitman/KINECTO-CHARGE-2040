@@ -9,6 +9,9 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/load_error_view.dart';
 import '../../../core/widgets/tab_page.dart';
+import '../../comfort/domain/comfort_settings.dart';
+import '../../comfort/presentation/comfort_controller.dart';
+import '../../comfort/presentation/comfort_copy.dart';
 import '../../faults/domain/fault.dart';
 import '../../faults/presentation/faults_controller.dart';
 import '../../jacket/domain/jacket_status.dart';
@@ -41,7 +44,15 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             _GaugeCard(jacket: jacket, now: now),
             const SizedBox(height: 12),
-            _Tiles(jacket: jacket, openFaults: openFaults),
+            _Tiles(
+              jacket: jacket,
+              openFaults: openFaults,
+              comfortMode: ref
+                  .watch(comfortControllerProvider)
+                  .value
+                  ?.saved
+                  .mode,
+            ),
           ],
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -90,12 +101,17 @@ class _GaugeCard extends StatelessWidget {
 }
 
 class _Tiles extends StatelessWidget {
-  const _Tiles({required this.jacket, required this.openFaults});
+  const _Tiles({
+    required this.jacket,
+    required this.openFaults,
+    required this.comfortMode,
+  });
 
   static const double _gap = 10;
 
   final JacketStatus jacket;
   final List<Fault> openFaults;
+  final ComfortMode? comfortMode;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +126,9 @@ class _Tiles extends StatelessWidget {
         color: AppColors.comfortTile,
         icon: Icons.thermostat_outlined,
         label: AppStrings.comfortTile,
-        value: _modeLabel(jacket.comfortMode),
+        value: comfortMode == null
+            ? AppStrings.noReading
+            : ComfortCopy.modeLabel(comfortMode!),
         onTap: () => context.push(AppRoutes.comfort),
       ),
       StatusTile(
@@ -158,11 +176,4 @@ class _Tiles extends StatelessWidget {
       context.go(AppRoutes.faults);
     }
   }
-
-  static String _modeLabel(ComfortMode mode) => switch (mode) {
-    ComfortMode.auto => AppStrings.modeAuto,
-    ComfortMode.cool => AppStrings.modeCool,
-    ComfortMode.warm => AppStrings.modeWarm,
-    ComfortMode.off => AppStrings.modeOff,
-  };
 }

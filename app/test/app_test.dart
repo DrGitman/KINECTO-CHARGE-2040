@@ -98,7 +98,7 @@ void main() {
     await _scrollToEnd(tester);
     await tester.tap(find.text(AppStrings.comfortTile));
     await tester.pumpAndSettle();
-    expect(find.text(AppStrings.comfortPlaceholder), findsOneWidget);
+    expect(find.text(AppStrings.insideSensorOffline), findsOneWidget);
     expect(find.byType(FloatingTabBar), findsNothing);
 
     await tester.pageBack();
@@ -151,6 +151,44 @@ void main() {
 
     expect(find.text(_shortTitle(FaultCode.bufferNotCharging)), findsOneWidget);
     expect(find.text(_shortTitle(FaultCode.insideSensorSilent)), findsNothing);
+  });
+
+  testWidgets('saved comfort mode shows on the home tile', (tester) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _scrollToEnd(tester);
+    await tester.tap(find.text(AppStrings.comfortTile));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(AppStrings.modeCool));
+    await tester.pump();
+    await _scrollToEnd(tester);
+    await tester.tap(find.text(AppStrings.saveToJacketButton));
+    await tester.pumpAndSettle();
+    expect(find.text(AppStrings.comfortSaved), findsOneWidget);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text(AppStrings.modeCool), findsOneWidget);
+  });
+
+  testWidgets('comfort gauge reads again once the sensor fault is resolved', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _scrollToEnd(tester);
+    await tester.tap(find.text(AppStrings.openFaultsTile));
+    await tester.pumpAndSettle();
+    await _tapInList(tester, AppStrings.markResolvedButton);
+    await tester.pumpAndSettle();
+
+    await _scrollToEnd(tester);
+    await tester.tap(find.text(AppStrings.comfortTile));
+    await tester.pumpAndSettle();
+
+    expect(find.text(AppStrings.insideNow), findsOneWidget);
+    expect(find.text(AppStrings.insideSensorOffline), findsNothing);
   });
 
   testWidgets('sign-out from profile returns to sign-in', (tester) async {

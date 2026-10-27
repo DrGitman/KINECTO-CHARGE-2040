@@ -1,5 +1,3 @@
-enum ComfortMode { auto, cool, warm, off }
-
 /// Latest snapshot of the paired jacket, as shown on Home.
 class JacketStatus {
   const JacketStatus({
@@ -7,7 +5,7 @@ class JacketStatus {
     required this.updatedAt,
     required this.comfortBatteryPercent,
     required this.energyBufferPercent,
-    required this.comfortMode,
+    required this.insideC,
     required this.cuffTagReadable,
     required this.isSimulated,
   });
@@ -16,7 +14,8 @@ class JacketStatus {
   final DateTime updatedAt;
   final int comfortBatteryPercent;
   final int energyBufferPercent;
-  final ComfortMode comfortMode;
+  // Inside microclimate, not a body reading.
+  final double insideC;
   final bool cuffTagReadable;
   final bool isSimulated;
 }
