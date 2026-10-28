@@ -9,6 +9,7 @@ Future<void> main() async {
   if (Backend.isConfigured) {
     WidgetsFlutterBinding.ensureInitialized();
     await Supabase.initialize(url: Backend.url, anonKey: Backend.anonKey);
+    Backend.connected = true;
   }
   runApp(const ProviderScope(child: KinectoCareApp()));
 }

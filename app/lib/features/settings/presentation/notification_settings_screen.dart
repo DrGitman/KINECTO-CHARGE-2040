@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_strings.dart';
+import '../../../core/backend.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/load_error_view.dart';
 import '../domain/app_preferences.dart';
@@ -70,7 +71,12 @@ class _AlertList extends ConsumerWidget {
         const SizedBox(height: 8),
         Text(AppStrings.quietHoursNote, style: small),
         const SizedBox(height: 4),
-        Text(AppStrings.alertsNotLiveNote, style: small),
+        Text(
+          Backend.connected
+              ? AppStrings.alertsLiveNote
+              : AppStrings.alertsNotLiveNote,
+          style: small,
+        ),
       ],
     );
   }

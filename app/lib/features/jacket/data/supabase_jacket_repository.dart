@@ -28,6 +28,11 @@ class SupabaseJacketRepository implements JacketRepository {
     insideC: (row['body_c'] as num?)?.toDouble() ?? double.nan,
     cuffTagReadable: row['cuff_tag_ok'] as bool,
     isSimulated: row['is_virtual'] as bool,
+    outsideC: (row['ambient_c'] as num?)?.toDouble(),
+    heaterOn: row['heater_on'] as bool? ?? false,
+    blowerOn: row['blower_on'] as bool? ?? false,
+    harvestedMj: (row['harvested_mj'] as num?)?.toDouble(),
+    activity: row['activity'] as String?,
   );
 
   static int _percent(Object? value) =>

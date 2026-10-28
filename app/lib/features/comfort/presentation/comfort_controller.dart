@@ -13,7 +13,7 @@ import '../domain/comfort_repository.dart';
 import '../domain/comfort_settings.dart';
 
 final comfortRepositoryProvider = Provider<ComfortRepository>(
-  (ref) => Backend.isConfigured
+  (ref) => Backend.connected
       ? SupabaseComfortRepository(
           ref.watch(supabaseClientProvider),
           Backend.jacketId,

@@ -20,5 +20,8 @@ class MockJacketRepository implements JacketRepository {
     insideC: 24.0,
     cuffTagReadable: true,
     isSimulated: true,
+    outsideC: 22.0,
+    harvestedMj: 1.2,
+    activity: 'walk',
   ));
 }

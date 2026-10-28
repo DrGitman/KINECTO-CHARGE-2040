@@ -8,7 +8,7 @@ import '../domain/jacket_repository.dart';
 import '../domain/jacket_status.dart';
 
 final jacketRepositoryProvider = Provider<JacketRepository>(
-  (ref) => Backend.isConfigured
+  (ref) => Backend.connected
       ? SupabaseJacketRepository(
           ref.watch(supabaseClientProvider),
           Backend.jacketId,

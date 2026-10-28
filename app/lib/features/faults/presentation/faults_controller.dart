@@ -9,7 +9,7 @@ import '../domain/fault.dart';
 import '../domain/fault_repository.dart';
 
 final faultRepositoryProvider = Provider<FaultRepository>(
-  (ref) => Backend.isConfigured
+  (ref) => Backend.connected
       ? SupabaseFaultRepository(
           ref.watch(supabaseClientProvider),
           Backend.jacketId,
