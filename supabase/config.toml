@@ -1,0 +1,12 @@
+# Supabase CLI settings for the Kinecto shared backend. Unset values use the CLI defaults.
+project_id = "kinecto-charge-2040"
+
+# Devices authenticate with their own x-device-key / x-reader-key, not a Supabase JWT.
+[functions.jacket-ingest]
+verify_jwt = false
+
+[functions.jacket-config]
+verify_jwt = false
+
+[functions.attendance-ingest]
+verify_jwt = false
