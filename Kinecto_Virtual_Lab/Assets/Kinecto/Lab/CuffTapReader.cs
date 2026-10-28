@@ -56,7 +56,7 @@ public class CuffTapReader : MonoBehaviour
         string note = !tapIn && !wasIn ? "  (no tap-in)" : "";
         Add($"{clock}  {sessionId}  {p.mock_student_id}  {dir}{note}");
         Show(note.Length > 0 ? Color.yellow : Color.green); if (beep) beep.Play();
-        if (bridge) bridge.SendTap(p.mock_student_id, dir, (ok, message) =>
+        if (bridge) bridge.SendTap(p.mock_student_id, dir, sessionId, (ok, message) =>
         {   // the cloud has the final say (e.g. the lecturer has not opened the session yet)
             if (!ok) Show(Color.red);
             Add($"{clock}  {sessionId}  cloud: {message}");

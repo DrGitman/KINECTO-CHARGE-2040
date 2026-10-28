@@ -65,9 +65,7 @@ html/
 .env.*
 !.env.example
 secrets.h
-Kinecto_Virtual_Lab/Assets/StreamingAssets/lab_connection.json
 Kinecto_Virtual_Lab/Assets/StreamingAssets/lab_connection.json.meta
-app/supabase.json
 supabase/.temp/
 supabase/.branches/
 

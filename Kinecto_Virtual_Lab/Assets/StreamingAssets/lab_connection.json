@@ -1,0 +1,9 @@
+{
+  "functions_url": "https://iqlhmjmzcgbmofrujprt.supabase.co/functions/v1",
+  "jacket_id": "KC-SIM-0001",
+  "device_key": "ba0f5739471c557a3dda0f2b94c7f254ae301f4ca5580a9b",
+  "send_every_s": 2,
+  "enabled": true,
+  "reader_id": "E201-SIM",
+  "reader_key": "6ebfa71733eca190cd20df2084ad33b0652decee118af459"
+}

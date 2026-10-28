@@ -73,11 +73,11 @@ Unity proves who it is with two keys: one for the virtual jacket and one for the
      ('KC-SIM-0001', 'jacket', encode(extensions.digest('PASTE-JACKET-KEY', 'sha256'), 'hex'), 'Unity virtual jacket'),
      ('E201-SIM',    'reader', encode(extensions.digest('PASTE-READER-KEY', 'sha256'), 'hex'), 'Unity E201 door reader');
    ```
-3. Share the two plain keys with the team privately (not in Git, not in the group chat history).
+3. Put the two plain keys in `lab_connection.json` (step 4). The Kinecto repository commits that file so every teammate can run the demo; anyone who can see the repository can use the keys, so rotate them (repeat this step with new keys) if you see fake taps or readings.
 
 ## 4. Unity Virtual Lab
 
-1. Copy `Kinecto_Virtual_Lab/Assets/StreamingAssets/lab_connection.example.json` to `lab_connection.json` in the same folder. It is gitignored.
+1. For the Kinecto project, `lab_connection.json` is already in the repository; skip to step 3. For a new project, copy `Kinecto_Virtual_Lab/Assets/StreamingAssets/lab_connection.example.json` to `lab_connection.json` in the same folder.
 2. Fill it in:
    ```json
    {
@@ -94,7 +94,7 @@ Unity proves who it is with two keys: one for the virtual jacket and one for the
 
 ## 5. Kinecto Care app (Flutter)
 
-1. Copy `app/supabase.example.json` to `app/supabase.json` (gitignored) and fill in the URL and publishable key.
+1. For the Kinecto project, `app/supabase.json` is already in the repository. For a new project, copy `app/supabase.example.json` to `app/supabase.json` and fill in the URL and publishable key.
 2. Run:
    ```powershell
    cd app
@@ -143,5 +143,5 @@ Unity proves who it is with two keys: one for the virtual jacket and one for the
 This setup is a prototype with mock IDs. The database policies let anyone with the publishable key read the data, change comfort settings, open sessions and record taps through `record_tap`. Before any real student or wearer data:
 
 - Add Supabase Auth (NUST sign-in) and replace the `demo` policies with per-user and per-role rules (wearer owns their jacket; lecturer manages their own module's sessions).
-- Keep device keys out of Git, and rotate them if one leaks: update the hash in `devices`.
+- Take `lab_connection.json` out of Git (it is committed for the team demo) and rotate the device keys: update the hash in `devices`.
 - Get the institutional approvals described in the project README.
