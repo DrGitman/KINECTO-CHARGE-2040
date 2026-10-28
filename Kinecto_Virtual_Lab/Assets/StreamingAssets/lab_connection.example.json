@@ -2,7 +2,7 @@
   "functions_url": "https://YOUR-PROJECT.supabase.co/functions/v1",
   "jacket_id": "KC-SIM-0001",
   "device_key": "paste the virtual jacket's device key here (never commit the real file)",
-  "send_every_s": 5,
+  "send_every_s": 2,
   "enabled": true,
   "reader_id": "E201-SIM",
   "reader_key": "paste the virtual reader key here (stored in Supabase only as a sha256 hash)"
