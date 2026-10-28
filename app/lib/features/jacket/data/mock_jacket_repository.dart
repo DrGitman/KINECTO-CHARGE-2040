@@ -17,7 +17,7 @@ class MockJacketRepository implements JacketRepository {
     updatedAt: _clock().subtract(_lastSyncAgo),
     comfortBatteryPercent: 92,
     energyBufferPercent: 64,
-    comfortMode: ComfortMode.auto,
+    insideC: 24.0,
     cuffTagReadable: true,
     isSimulated: true,
   );

@@ -18,7 +18,6 @@ abstract final class AppStrings {
 
   static const String repairsPlaceholder = 'No repairs yet.';
   static const String profilePlaceholder = 'Profile and settings coming soon.';
-  static const String comfortPlaceholder = 'Comfort settings coming soon.';
 
   static const String simulated = 'SIMULATED';
   static const String simulatedHint =
@@ -47,6 +46,23 @@ abstract final class AppStrings {
   static const String modeCool = 'Cool';
   static const String modeWarm = 'Warm';
   static const String modeOff = 'Off';
+
+  static const String insideNow = 'inside now';
+  static const String insideSensorOffline = 'Inside sensor offline';
+  static const String noReading = '--';
+  static const String warmMeBelow = 'Warm me below';
+  static const String coolMeAbove = 'Cool me above';
+  static const String lower = 'Lower';
+  static const String raise = 'Raise';
+  static const String limitsUsedInAuto = 'Auto mode uses these two limits.';
+  static String prewarmBefore(String time) => 'Pre-warm before $time';
+  static const String prewarmNote =
+      'Saved as a preference. The jacket does not pre-warm yet.';
+  static const String saveToJacketButton = 'Save to jacket';
+  static String savedAgo(String ago) => 'Saved $ago';
+  static const String comfortSaved = 'Comfort settings saved';
+  static const String comfortSaveFailed =
+      'Could not save these settings. Try again.';
 
   static const String faultsAll = 'All';
   static const String previousMonth = 'Previous month';
