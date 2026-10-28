@@ -1,5 +1,6 @@
 import 'jacket_status.dart';
 
 abstract interface class JacketRepository {
-  Future<JacketStatus> fetchStatus();
+  /// Latest snapshot, then a new one every time the jacket reports.
+  Stream<JacketStatus> watchStatus();
 }

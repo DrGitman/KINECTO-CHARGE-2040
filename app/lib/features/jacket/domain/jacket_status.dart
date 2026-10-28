@@ -14,7 +14,7 @@ class JacketStatus {
   final DateTime updatedAt;
   final int comfortBatteryPercent;
   final int energyBufferPercent;
-  // Inside microclimate, not a body reading.
+  // Inside microclimate, not a body reading. NaN while the inside sensor is silent.
   final double insideC;
   final bool cuffTagReadable;
   final bool isSimulated;

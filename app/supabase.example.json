@@ -1,0 +1,5 @@
+{
+  "SUPABASE_URL": "https://YOUR-PROJECT.supabase.co",
+  "SUPABASE_ANON_KEY": "paste the project's publishable (anon) key",
+  "KINECTO_JACKET_ID": "KC-SIM-0001"
+}

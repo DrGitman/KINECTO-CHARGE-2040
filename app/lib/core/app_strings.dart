@@ -96,6 +96,8 @@ abstract final class AppStrings {
 
   static const String faultAlerts = 'Fault alerts';
   static const String faultAlertsHint = 'Always on for safety faults';
+  static String newFaultAlert(String title) => 'Jacket fault: $title';
+  static const String viewFaultButton = 'View';
   static const String repairUpdates = 'Repair updates';
   static const String repairUpdatesHint = 'Each repair stage';
   static const String energyTips = 'Energy tips';
