@@ -17,13 +17,16 @@
 
  function pull(){
   if(pulling){again=true;return pulling}
+  let changed=false;
   pulling=(async()=>{
    const [s,e]=await Promise.all([db.from('sessions').select('*'),db.from('attendance_events').select('*').order('ts')]);
    if(s.error||e.error)throw s.error||e.error;
+   const before=JSON.stringify([data.sessions,data.events]);
    for(const r of s.data){let local=data.sessions.find(x=>x.id===r.id);if(local)Object.assign(local,fromRow(r));else data.sessions.push(local=fromRow(r));synced.set(r.id,JSON.stringify(toRow(local)))}
    data.events=[...e.data.map(fromEvent),...data.events.filter(pending)];
+   changed=JSON.stringify([data.sessions,data.events])!==before;
    save();ready=true;state='Live';
-  })().catch(err=>{state='Offline: '+(err.message||err)}).finally(()=>{pulling=null;show();refresh();if(again){again=false;pull()}});
+  })().catch(err=>{state='Offline: '+(err.message||err)}).finally(()=>{pulling=null;show();if(changed)refresh();if(again){again=false;pull()}});
   return pulling;
  }
 
