@@ -4,7 +4,7 @@ import '../domain/comfort_limits.dart';
 import '../domain/comfort_repository.dart';
 import '../domain/comfort_settings.dart';
 
-/// SIMULATED settings until Supabase and the Bluetooth link are wired.
+/// SIMULATED settings, used when Supabase is not configured.
 class MockComfortRepository implements ComfortRepository {
   MockComfortRepository(this._clock) : _settings = _seed(_clock());
 
@@ -22,6 +22,9 @@ class MockComfortRepository implements ComfortRepository {
     _settings = settings.copyWith(updatedAt: _clock());
     return _settings;
   }
+
+  @override
+  Stream<ComfortSettings> watchSettings() => const Stream.empty();
 
   // Thresholds match warm_below_c and cool_above_c in docs/contracts/thermal.json.
   static ComfortSettings _seed(DateTime now) => ComfortSettings(

@@ -5,6 +5,9 @@ abstract interface class FaultRepository {
 
   /// Throws [FaultNotFoundException] when [faultId] is unknown.
   Future<void> markResolved(String faultId);
+
+  /// The whole fault log again whenever a fault opens, closes or changes.
+  Stream<List<Fault>> watchFaults();
 }
 
 class FaultNotFoundException implements Exception {

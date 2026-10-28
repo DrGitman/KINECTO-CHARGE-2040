@@ -3,7 +3,7 @@ import '../../jacket/data/mock_jacket_repository.dart';
 import '../domain/fault.dart';
 import '../domain/fault_repository.dart';
 
-/// SIMULATED fault log of the Virtual Lab jacket until Supabase is wired.
+/// SIMULATED fault log of the Virtual Lab jacket, used when Supabase is not configured.
 class MockFaultRepository implements FaultRepository {
   MockFaultRepository(Clock clock) : _faults = _seed(clock());
 
@@ -12,7 +12,9 @@ class MockFaultRepository implements FaultRepository {
   @override
   Future<List<Fault>> fetchFaults() async => List.unmodifiable(_faults);
 
-  // Local only: who closes a fault in Supabase is not decided yet.
+  @override
+  Stream<List<Fault>> watchFaults() => const Stream.empty();
+
   @override
   Future<void> markResolved(String faultId) async {
     final index = _faults.indexWhere((fault) => fault.id == faultId);

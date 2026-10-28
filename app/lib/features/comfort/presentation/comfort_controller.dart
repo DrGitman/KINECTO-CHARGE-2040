@@ -1,17 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/backend.dart';
 import '../../../core/clock.dart';
 import '../../faults/domain/fault.dart';
 import '../../faults/presentation/faults_controller.dart';
 import '../../jacket/presentation/jacket_providers.dart';
 import '../data/mock_comfort_repository.dart';
+import '../data/supabase_comfort_repository.dart';
 import '../domain/comfort_limits.dart';
 import '../domain/comfort_repository.dart';
 import '../domain/comfort_settings.dart';
 
 final comfortRepositoryProvider = Provider<ComfortRepository>(
-  (ref) => MockComfortRepository(ref.watch(clockProvider)),
+  (ref) => Backend.isConfigured
+      ? SupabaseComfortRepository(
+          ref.watch(supabaseClientProvider),
+          Backend.jacketId,
+        )
+      : MockComfortRepository(ref.watch(clockProvider)),
 );
 
 final comfortControllerProvider =
@@ -26,7 +33,7 @@ final insideReadingProvider = FutureProvider<double?>((ref) async {
   final sensorSilent = faults.any(
     (fault) => fault.isOpen && fault.code == FaultCode.insideSensorSilent,
   );
-  return sensorSilent ? null : jacket.insideC;
+  return sensorSilent || jacket.insideC.isNaN ? null : jacket.insideC;
 });
 
 /// Last saved settings plus the edits not sent to the jacket yet.
@@ -54,8 +61,23 @@ class ComfortEditor {
 class ComfortController extends AsyncNotifier<ComfortEditor> {
   @override
   Future<ComfortEditor> build() async {
-    final settings = await ref.read(comfortRepositoryProvider).fetchSettings();
+    final repository = ref.read(comfortRepositoryProvider);
+    final subscription = repository.watchSettings().listen(_onRemoteChange);
+    ref.onDispose(subscription.cancel);
+    final settings = await repository.fetchSettings();
     return ComfortEditor(saved: settings, draft: settings);
+  }
+
+  // Changed on the jacket or another device. Edits not saved yet stay in the draft.
+  void _onRemoteChange(ComfortSettings remote) {
+    final editor = state.value;
+    if (editor == null || editor.isSaving) return;
+    state = AsyncData(
+      ComfortEditor(
+        saved: remote,
+        draft: editor.hasChanges ? editor.draft : remote,
+      ),
+    );
   }
 
   void selectMode(ComfortMode mode) =>
