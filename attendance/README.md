@@ -26,9 +26,13 @@ Events are saved in this browser's local storage. They are kept separate by sess
 
 Sign in as Student 001 to view attendance and send a query. Sign in as Dr. Mark to open Messages and reply. Students cannot edit attendance in their view. A lecturer can record a manual correction with a reason from the Register page.
 
+## Live sync with Unity and Kinecto Care
+
+Fill in `supabase-config.js` to share sessions and taps through Supabase. Unity door-reader taps then appear live, and every open browser stays in sync. `cloud-sync.js` does this; leave the config empty for the local demo. Setup: [docs/live-sync-setup.md](../docs/live-sync-setup.md).
+
 ## What is not connected yet
 
-Unity, Render, the university database, physical NFC readers and real NUST sign-in are not connected. The reader statuses and report charts contain sample information. Browser role selection and local storage are not secure enough for real student records.
+The university database, physical NFC readers and real NUST sign-in are not connected. The reader statuses and report charts contain sample information. Browser role selection and local storage are not secure enough for real student records.
 
 The `docs/hci/attendance` folder explains the system, roles, privacy rules and the planned integration.
 
