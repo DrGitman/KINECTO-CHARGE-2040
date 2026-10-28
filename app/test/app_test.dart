@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kinecto_care/app.dart';
 import 'package:kinecto_care/core/app_strings.dart';
 import 'package:kinecto_care/core/widgets/floating_tab_bar.dart';
+import 'package:kinecto_care/features/auth/data/fake_auth_repository.dart';
 import 'package:kinecto_care/features/faults/presentation/fault_copy.dart';
 import 'package:kinecto_care/features/faults/domain/fault.dart';
 
@@ -83,7 +84,7 @@ void main() {
     expect(find.text(AppStrings.repairsPlaceholder), findsOneWidget);
 
     await _openTab(tester, AppStrings.profileTab);
-    expect(find.text(AppStrings.profilePlaceholder), findsOneWidget);
+    expect(find.text(FakeAuthRepository.mockUserId), findsOneWidget);
 
     await _openTab(tester, AppStrings.homeTab);
     expect(find.text(AppStrings.heroOneFault), findsOneWidget);
@@ -196,10 +197,105 @@ void main() {
     await _signIn(tester);
     await _openTab(tester, AppStrings.profileTab);
 
+    await _scrollToEnd(tester);
     await tester.tap(find.text(AppStrings.signOutButton));
+    await tester.pumpAndSettle();
+    expect(find.text(AppStrings.signOutTitle), findsOneWidget);
+
+    await tester.tap(find.text(AppStrings.signOutButton).last);
     await tester.pumpAndSettle();
 
     expect(find.text(AppStrings.signInButton), findsOneWidget);
+  });
+
+  testWidgets('cancelling sign-out keeps the wearer signed in', (tester) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _openTab(tester, AppStrings.profileTab);
+
+    await _scrollToEnd(tester);
+    await tester.tap(find.text(AppStrings.signOutButton));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(AppStrings.cancelButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text(AppStrings.signOutTitle), findsNothing);
+    expect(find.byType(FloatingTabBar), findsOneWidget);
+  });
+
+  testWidgets('profile shows the saved comfort range', (tester) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _openTab(tester, AppStrings.profileTab);
+
+    expect(
+      find.text(AppStrings.comfortSummary(AppStrings.modeAuto, '19°C', '26°C')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('dark theme choice switches the whole app', (tester) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _openTab(tester, AppStrings.profileTab);
+
+    await _tapInList(tester, AppStrings.themeTitle);
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel(AppStrings.themeDark));
+    await tester.pumpAndSettle();
+
+    final context = tester.element(find.text(AppStrings.reduceMotion));
+    expect(Theme.of(context).brightness, Brightness.dark);
+  });
+
+  testWidgets('home, profile and comfort still fit with larger text', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _openTab(tester, AppStrings.profileTab);
+
+    await _tapInList(tester, AppStrings.themeTitle);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(Switch).at(1));
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await _openTab(tester, AppStrings.homeTab);
+    await _scrollToEnd(tester);
+    expect(find.text(AppStrings.heroOneFault), findsOneWidget);
+
+    await _openTab(tester, AppStrings.profileTab);
+    await _tapInList(tester, AppStrings.openComfortButton);
+    await tester.pumpAndSettle();
+    await _scrollToEnd(tester);
+    expect(find.text(AppStrings.saveToJacketButton), findsOneWidget);
+  });
+
+  testWidgets('fault alerts cannot be turned off', (tester) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _openTab(tester, AppStrings.profileTab);
+
+    await _tapInList(tester, AppStrings.notificationsTitle);
+    await tester.pumpAndSettle();
+
+    final faultSwitch = tester.widget<Switch>(find.byType(Switch).first);
+    expect(faultSwitch.value, isTrue);
+    expect(faultSwitch.onChanged, isNull);
+  });
+
+  testWidgets('help shows the four repair card steps', (tester) async {
+    await _pumpApp(tester);
+    await _signIn(tester);
+    await _openTab(tester, AppStrings.profileTab);
+
+    await _tapInList(tester, AppStrings.helpTitle);
+    await tester.pumpAndSettle();
+
+    for (final step in AppStrings.repairCardSteps) {
+      expect(find.text(step), findsOneWidget);
+    }
   });
 }
 

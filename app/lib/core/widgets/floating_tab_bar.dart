@@ -31,31 +31,34 @@ class FloatingTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    return SafeArea(
-      minimum: const EdgeInsets.fromLTRB(
-        _sideMargin,
-        0,
-        _sideMargin,
-        _bottomMargin,
-      ),
-      child: Container(
-        height: _barHeight,
-        padding: const EdgeInsets.all(_barPadding),
-        decoration: const ShapeDecoration(
-          color: AppColors.tabBar,
-          shape: StadiumBorder(),
+    // The bar has a fixed height, so the pill label keeps its size when text is enlarged.
+    return MediaQuery.withNoTextScaling(
+      child: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(
+          _sideMargin,
+          0,
+          _sideMargin,
+          _bottomMargin,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            for (var i = 0; i < items.length; i++)
-              _TabButton(
-                item: items[i],
-                isSelected: i == currentIndex,
-                duration: reduceMotion ? Duration.zero : pillDuration,
-                onTap: () => onSelected(i),
-              ),
-          ],
+        child: Container(
+          height: _barHeight,
+          padding: const EdgeInsets.all(_barPadding),
+          decoration: const ShapeDecoration(
+            color: AppColors.tabBar,
+            shape: StadiumBorder(),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (var i = 0; i < items.length; i++)
+                _TabButton(
+                  item: items[i],
+                  isSelected: i == currentIndex,
+                  duration: reduceMotion ? Duration.zero : pillDuration,
+                  onTap: () => onSelected(i),
+                ),
+            ],
+          ),
         ),
       ),
     );

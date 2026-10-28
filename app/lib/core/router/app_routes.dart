@@ -8,6 +8,11 @@ abstract final class AppRoutes {
   // Comfort is not a tab: it is pushed full screen from the Home tile and from Profile.
   static const String comfort = '/comfort';
 
+  // Settings pages pushed full screen from Profile.
+  static const String notificationSettings = '/settings/notifications';
+  static const String themeSettings = '/settings/theme';
+  static const String help = '/help';
+
   // Fault detail is also full screen, opened from the log, a Home tile or an alert.
   static const String faultDetail = '/fault/:id';
   static String faultDetailFor(String faultId) => '/fault/$faultId';
