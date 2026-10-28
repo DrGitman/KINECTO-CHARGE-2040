@@ -158,13 +158,31 @@ public class KinectoPlayTest : MonoBehaviour
         yield return new WaitForSeconds(3.5f);
         Check("Doors close behind you", !door.IsOpen, $"door open={door.IsOpen} ({Vector3.Distance(Flat(cc.transform.position), Flat(mid)):0.0} m away)");
 
-        // 7) walk out: exit sensor opens the doors from inside
-        yield return WalkTo(mid - n * 1.2f, 4f);
-        bool opened = false;
-        for (float t = 0; t < 3f && Vector3.Dot(cc.transform.position - mid, n) < 1.2f; t += Time.deltaTime) { opened |= door.IsOpen; LabInput.SimAxis = AxisFor(n); yield return null; }
-        LabInput.SimAxis = Vector2.zero;
-        opened |= door.IsOpen;
-        Check("Exit sensor opens the doors from inside", opened && Vector3.Dot(cc.transform.position - mid, n) > 0.5f, $"opened={opened}, now {Vector3.Dot(cc.transform.position - mid, n):0.00} m outside");
+        // 7) leaving: no free exit sensor in classrooms - walking up to the doors from inside keeps them shut,
+        //    tapping out at the station inside logs OUT and opens them
+        yield return WalkTo(mid - n * 1.0f, 4f);
+        yield return Hold(n, 1.2f);
+        Check("No free exit: doors stay shut from inside", !door.IsOpen && Vector3.Dot(cc.transform.position - mid, n) < 0f, $"door open={door.IsOpen}");
+        ReaderStation outSt = null;
+        foreach (var s2 in FindObjectsByType<ReaderStation>(FindObjectsSortMode.None)) if (s2.IsTapOut && s2.doors == door) outSt = s2;
+        if (outSt)
+        {
+            var outReader = outSt.reader; int ol = outReader.log.Count;
+            Vector3 sp = outSt.transform.position; sp.y = 0.1f;
+            Place(sp - n * 0.9f, n); yield return new WaitForSeconds(0.4f);
+            Check("Tap-out station inside the classroom", ReaderStation.Nearest == outSt, ReaderStation.Nearest ? ReaderStation.Nearest.name + " · " + ReaderStation.Nearest.Prompt : "no station in reach");
+            LabInput.SimTap();
+            float oAt = -1f;
+            for (float t = 0; t < 2.5f; t += Time.deltaTime) { if (oAt < 0 && door.IsOpen) { oAt = t; Shot("7_tap_out"); } yield return null; }
+            string outLast = outReader.log.Count > ol ? outReader.log[outReader.log.Count - 1] : "(none)";
+            Check("Tap out logs OUT (after the tap-in)", outReader.log.Count > ol && outLast.Contains(" OUT") && !outLast.Contains("no tap-in"), outLast);
+            Check("Doors slide open after the tap-out", oAt >= 0, $"open after {oAt:0.0} s");
+            yield return WalkTo(mid - n * 0.6f, 3f);
+            for (float t = 0; t < 3f && Vector3.Dot(cc.transform.position - mid, n) < 1.2f; t += Time.deltaTime) { LabInput.SimAxis = AxisFor(n); yield return null; }
+            LabInput.SimAxis = Vector2.zero;
+            Check("Walk out after tapping out", Vector3.Dot(cc.transform.position - mid, n) > 0.5f, $"now {Vector3.Dot(cc.transform.position - mid, n):0.00} m outside");
+        }
+        else Check("Tap-out station inside the classroom", false, "missing");
         yield return Hold(n, 1.2f);
         yield return new WaitForSeconds(3f);
         Check("Doors close after walking out", !door.IsOpen, $"door open={door.IsOpen}");

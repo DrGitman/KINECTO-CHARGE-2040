@@ -284,6 +284,42 @@ public static class KinectoSceneBuilder
             var rd = env.GetComponentsInChildren<Transform>(true);
             Transform readerT = null; foreach (var t in rd) if (t.name == "PROP_CardReader" + suffix) readerT = t;
             if (!readerT) { Debug.LogWarning("no reader " + suffix); continue; }
+            // tap-OUT station inside the classroom, back to back with the tap-IN reader: same height and offset from the
+            // doors, on the inner face of the wall, turned to face into the room (the Hub door is access only: no station)
+            Transform outT = null;
+            if (suffix != "_Hub" && doorParts.TryGetValue("DOOR_" + door + "_L", out var dL) && doorParts.TryGetValue("DOOR_" + door + "_R", out var dR))
+            {
+                Physics.SyncTransforms();
+                Vector3 dmid = (dL.position + dR.position) * 0.5f;
+                Vector3 along = dL.position - dR.position; along.y = 0f; along.Normalize();
+                Vector3 nOut = Vector3.Cross(along, Vector3.up); if (Vector3.Dot(readerT.position - dmid, nOut) < 0f) nOut = -nOut;
+                Vector3 rc = readerT.GetComponent<Renderer>().bounds.center;
+                Vector3 onPlane = dmid + along * Vector3.Dot(rc - dmid, along); onPlane.y = rc.y;
+                float depth = -0.3f;                                             // fallback: 0.3 m inside the door line
+                float bestD = float.MinValue;
+                foreach (var h in Physics.RaycastAll(onPlane - nOut * 3f, nOut, 3.4f, ~0, QueryTriggerInteraction.Ignore))
+                {
+                    if (h.collider.name.StartsWith("DOOR_")) continue;
+                    float dd = Vector3.Dot(h.point - dmid, nOut);
+                    if (dd > -0.8f && dd < 0.2f && dd > bestD) bestD = dd;                // the wall's inner face
+                }
+                if (bestD > float.MinValue) depth = bestD - 0.035f;
+                Vector3 target = onPlane + nOut * depth;
+                var clone = Object.Instantiate(readerT.gameObject, readerT.parent);
+                clone.name = "PROP_TapOut" + suffix;
+                clone.transform.RotateAround((rc + target) * 0.5f, Vector3.up, 180f);   // mirrored through the wall
+                outT = clone.transform;
+                var sticker = env.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => x.name == "DECAL_Card_Sticker" + suffix);
+                if (sticker)
+                {
+                    var stc = sticker.GetComponent<Renderer>().bounds.center;
+                    Vector3 rel = stc - rc;
+                    Vector3 stT = target + along * Vector3.Dot(rel, along) + Vector3.up * rel.y - nOut * Vector3.Dot(rel, nOut);
+                    var sclone = Object.Instantiate(sticker.gameObject, sticker.parent);
+                    sclone.name = "DECAL_TapOut_Sticker" + suffix;
+                    sclone.transform.RotateAround((stc + stT) * 0.5f, Vector3.up, 180f);
+                }
+            }
             var trig = Add<BoxCollider>(readerT.gameObject); trig.isTrigger = true;
             trig.center = readerT.InverseTransformPoint(readerT.GetComponent<Renderer>().bounds.center); trig.size = new Vector3(0.35f, 0.4f, 0.35f);
             var ctr = Add<CuffTapReader>(readerT.gameObject); ctr.sessionId = session; ctr.bridge = bridge; ctr.faults = faults;
@@ -302,6 +338,21 @@ public static class KinectoSceneBuilder
 
             var st = Add<ReaderStation>(readerT.gameObject);
             st.reader = ctr; st.doors = sd; st.roomName = room; st.attendance = suffix != "_Hub"; if (suffix == "_Hub") ctr.bridge = null; st.player = player.transform; st.cuffTag = cuff.transform; st.hud = hud; st.lab = lab;
+            // classrooms: tap IN outside, tap OUT inside, no free exit sensor -> every visit has an IN and an OUT
+            ctr.direction = suffix == "_Hub" ? CuffTapReader.Direction.Toggle : CuffTapReader.Direction.In;
+            sd.freeExit = suffix == "_Hub";
+            if (outT)
+            {
+                var trig2 = Add<BoxCollider>(outT.gameObject); trig2.isTrigger = true;
+                trig2.center = outT.InverseTransformPoint(outT.GetComponent<Renderer>().bounds.center); trig2.size = new Vector3(0.35f, 0.4f, 0.35f);
+                var ctr2 = Add<CuffTapReader>(outT.gameObject); ctr2.sessionId = session; ctr2.bridge = bridge; ctr2.faults = faults;
+                ctr2.direction = CuffTapReader.Direction.Out;
+                var lg2 = new GameObject("ReaderLight"); lg2.transform.SetParent(outT, false); lg2.transform.position = outT.GetComponent<Renderer>().bounds.center + Vector3.up * 0.1f;
+                var rl2 = lg2.AddComponent<Light>(); rl2.type = LightType.Point; rl2.range = 1.6f; rl2.intensity = 2.5f; rl2.color = Color.green; rl2.enabled = false;
+                ctr2.readerLight = rl2; allReaders.Add(ctr2);
+                var st2 = Add<ReaderStation>(outT.gameObject);
+                st2.reader = ctr2; st2.doors = sd; st2.roomName = room; st2.attendance = true; st2.player = player.transform; st2.cuffTag = cuff.transform; st2.hud = hud; st2.lab = lab;
+            }
         }
         faults.reader = firstReader;
 

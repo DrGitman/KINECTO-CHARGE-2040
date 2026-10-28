@@ -448,7 +448,7 @@ public class LabHud : MonoBehaviour
         {
             var near = ReaderStation.Nearest; var hubSt = HubStation.Nearest;
             if (hubSt) { playerLabel.text.text = hubSt.kind == HubStation.Kind.Repair ? $"{hubSt.label} · press E to repair your jacket" : $"{hubSt.label} · press E to scan your jacket"; playerLabel.dot.color = Teal; }
-            else if (near) { playerLabel.text.text = $"{near.roomName} reader · press E to tap your cuff"; playerLabel.dot.color = Gold; }
+            else if (near) { playerLabel.text.text = $"{near.roomName} · {near.Prompt}"; playerLabel.dot.color = Gold; }
             else
             {
                 string act = lab.CurrentActivity;

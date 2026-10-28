@@ -1,7 +1,7 @@
 // Kinecto Virtual Lab: one campus NPC with a simple "campus life" brain on a NavMeshAgent.
-//   Student  : hangs out in the courtyard (faces friends, chats), then goes to a class: taps the card reader, the doors
-//              open, walks in, stands at a desk facing the front for a while (taps / types in the lab), leaves through
-//              the exit sensor and goes back out.
+//   Student  : hangs out in the courtyard (faces friends, chats), then goes to a class: taps IN at the card reader,
+//              the doors open, walks in, stands at a desk facing the front for a while (taps / types in the lab), taps
+//              OUT at the station inside and goes back out.
 //   Lecturer : teaches on the theatre stage (paces, gestures, talks to the class), now and then steps out and returns.
 //   Guard    : patrols gate -> building entrances -> Hub -> courtyard, looks around at each stop.
 //   HubDesk  : reception desk inside the Kinecto Hub, greets people at the door.
@@ -203,12 +203,28 @@ public class CampusNpc : MonoBehaviour
         yield return GoTo(r.inside, 0.5f);
     }
 
-    /// <summary>walk to the doors from the inside (exit sensor opens them), go out</summary>
+    /// <summary>leave a room: tap out at the station inside (classrooms), the doors open, walk out.
+    /// Rooms without a tap-out station (the Hub) use the exit sensor.</summary>
     IEnumerator Exit(CampusLife.Room r)
     {
         State = "leaving " + r.key;
-        yield return GoTo(r.inside, 0.5f);
-        yield return WaitOpen(r.door, 3f);
+        if (r.tapOut)
+        {
+            yield return GoTo(r.tapOutStand, 0.3f);
+            yield return Face(r.tapOut.transform.position, 0.35f);
+            State = "tap out " + r.key;
+            if (anim) { anim.ResetTrigger("Tap"); anim.SetTrigger("Tap"); }
+            yield return new WaitForSeconds(0.9f);
+            while (Paused) yield return null;
+            r.door.Open(6f);                     // simulated NPC tap-out: opens the doors, writes no attendance row
+            yield return WaitOpen(r.door, 2.5f);
+            State = "leaving " + r.key;
+        }
+        else
+        {
+            yield return GoTo(r.inside, 0.5f);
+            yield return WaitOpen(r.door, 3f);
+        }
         yield return GoTo(r.outside, 0.5f);
     }
 

@@ -17,6 +17,8 @@ public class CampusLife : MonoBehaviour
     {
         public string name, key;
         public ReaderStation reader; public SlidingDoor door;
+        public ReaderStation tapOut;            // station inside the room (classrooms), null = free exit sensor (Hub)
+        public Vector3 tapOutStand;
         public Bounds area;                     // where people stand / sit inside
         public Vector3 facing;                  // which way the class faces (front of the room)
         public Vector3 readerStand, outside, inside;
@@ -83,9 +85,10 @@ public class CampusLife : MonoBehaviour
         }
 
         // ---------------- rooms from the card readers
-        foreach (var rs in FindObjectsByType<ReaderStation>(FindObjectsSortMode.None))
+        var stations = FindObjectsByType<ReaderStation>(FindObjectsSortMode.None);
+        foreach (var rs in stations)
         {
-            if (!rs.doors) continue;
+            if (!rs.doors || rs.IsTapOut) continue;
             var r = new Room { name = rs.roomName, reader = rs, door = rs.doors, attendance = rs.attendance };
             string n = rs.name;
             Bounds area; Vector3 face;
@@ -109,6 +112,13 @@ public class CampusLife : MonoBehaviour
             r.outside = mid + o * 1.8f;
             foreach (var d in new[] { 1.8f, 1.4f, 1.1f, 0.8f, 0.6f })
                 if (Snap(mid + o * d, out var qo, 0.4f) && Reachable(qo, r.inside) && Reachable(gate, qo)) { r.outside = qo; break; }
+            foreach (var so in stations)
+                if (so.IsTapOut && so.doors == r.door)
+                {
+                    r.tapOut = so; r.tapOutStand = r.inside;
+                    foreach (var d in new[] { 0.65f, 0.5f, 0.8f })
+                        if (Snap(new Vector3(so.transform.position.x, mid.y, so.transform.position.z) - o * d, out var qt, 0.4f) && Reachable(qt, r.inside)) { r.tapOutStand = qt; break; }
+                }
             r.readerStand = r.outside;
             foreach (var d in new[] { 0.65f, 0.5f, 0.4f })
                 if (Snap(new Vector3(rs.transform.position.x, mid.y, rs.transform.position.z) + o * d, out var qs, 0.4f) && Reachable(qs, r.inside)) { r.readerStand = qs; break; }
@@ -203,7 +213,7 @@ public class CampusLife : MonoBehaviour
         foreach (var r in rooms)
         {
             Gizmos.color = Color.cyan; foreach (var s in r.seats) Gizmos.DrawWireSphere(s, 0.25f);
-            Gizmos.color = Color.yellow; Gizmos.DrawSphere(r.readerStand, 0.2f); Gizmos.DrawSphere(r.inside, 0.2f); Gizmos.DrawSphere(r.outside, 0.2f);
+            Gizmos.color = Color.yellow; Gizmos.DrawSphere(r.readerStand, 0.2f); Gizmos.DrawSphere(r.inside, 0.2f); if (r.tapOut) Gizmos.DrawSphere(r.tapOutStand, 0.2f); Gizmos.DrawSphere(r.outside, 0.2f);
         }
         Gizmos.color = Color.magenta; foreach (var s in hubStations) Gizmos.DrawLine(s.stand, s.look);
         Gizmos.color = Color.red; for (int i = 0; i + 1 < patrol.Count; i++) Gizmos.DrawLine(patrol[i] + Vector3.up * 0.2f, patrol[i + 1] + Vector3.up * 0.2f);
