@@ -3,7 +3,8 @@ import '../domain/auth_session.dart';
 
 /// Stand-in until NUST sign-in is wired. Always signs in the same mock user.
 class FakeAuthRepository implements AuthRepository {
-  static const String mockUserId = 'STU-MOCK-0001';
+  // Same mock student as the Unity lab avatar and the Attendance website.
+  static const String mockUserId = 'MOCK-0187';
 
   @override
   Future<AuthSession> signIn() async => const AuthSession(userId: mockUserId);

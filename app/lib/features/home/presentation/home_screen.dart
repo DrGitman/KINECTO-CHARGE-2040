@@ -53,6 +53,8 @@ class HomeScreen extends ConsumerWidget {
                   ?.saved
                   .mode,
             ),
+            const SizedBox(height: 12),
+            _LiveCard(jacket: jacket),
           ],
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -176,4 +178,87 @@ class _Tiles extends StatelessWidget {
       context.go(AppRoutes.faults);
     }
   }
+}
+
+/// What the jacket is doing right now, as the Virtual Lab reports it.
+class _LiveCard extends StatelessWidget {
+  const _LiveCard({required this.jacket});
+
+  final JacketStatus jacket;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final outside = jacket.outsideC;
+    final harvested = jacket.harvestedMj;
+    final rows = [
+      (
+        Icons.whatshot_outlined,
+        AppStrings.heaterFanLabel,
+        jacket.heaterOn
+            ? AppStrings.heatingNow
+            : jacket.blowerOn
+            ? AppStrings.coolingNow
+            : AppStrings.idleNow,
+      ),
+      (
+        Icons.wb_sunny_outlined,
+        AppStrings.outsideLabel,
+        outside == null
+            ? AppStrings.noReading
+            : '${outside.toStringAsFixed(0)} °C',
+      ),
+      (
+        Icons.bolt,
+        AppStrings.harvestedLabel,
+        harvested == null
+            ? AppStrings.noReading
+            : '${harvested.toStringAsFixed(2)} mJ',
+      ),
+      (
+        Icons.directions_walk,
+        AppStrings.activityLabel,
+        _activity(jacket.activity),
+      ),
+    ];
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(AppStrings.liveFromJacket, style: textTheme.titleSmall),
+            const SizedBox(height: 8),
+            for (final (icon, label, value) in rows)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  children: [
+                    Icon(icon, size: 18),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(label, style: textTheme.bodyMedium)),
+                    Text(
+                      value,
+                      style: textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static String _activity(String? activity) => switch (activity) {
+    null || '' => AppStrings.noReading,
+    'walk' => 'Walking',
+    'run' => 'Running',
+    'standing' => 'Standing',
+    'seated' => 'Seated',
+    final String other => other,
+  };
 }

@@ -46,6 +46,14 @@ abstract final class AppStrings {
   static const String modeWarm = 'Warm';
   static const String modeOff = 'Off';
 
+  static const String liveFromJacket = 'Live from the jacket';
+  static const String heaterFanLabel = 'Heater & fan';
+  static const String heatingNow = 'Heating';
+  static const String coolingNow = 'Cooling';
+  static const String idleNow = 'Idle';
+  static const String outsideLabel = 'Outside';
+  static const String harvestedLabel = 'Harvested';
+  static const String activityLabel = 'Wearer';
   static const String insideNow = 'inside now';
   static const String insideSensorOffline = 'Inside sensor offline';
   static const String noReading = '--';
@@ -110,6 +118,8 @@ abstract final class AppStrings {
       'Quiet hours 22:00 to 07:00. Safety alerts still come through.';
   static const String alertsNotLiveNote =
       'Saved on this phone. Alerts start once the jacket is linked to Kinecto Care online.';
+  static const String alertsLiveNote =
+      'Saved on this phone. Fault alerts pop up as soon as your jacket reports one.';
 
   static const String themeLight = 'Light';
   static const String themeDark = 'Dark';
