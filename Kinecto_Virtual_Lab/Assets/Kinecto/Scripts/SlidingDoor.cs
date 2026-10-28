@@ -1,5 +1,6 @@
-// Kinecto Virtual Lab: pair of sliding glass doors. Opened by a ReaderStation tap (player) or a campus NPC's tap;
-// the exit sensor on the inside opens them freely when someone walks out. Closes again after the hold time.
+// Kinecto Virtual Lab: pair of sliding glass doors. Opened by a ReaderStation tap (player) or a campus NPC's tap:
+// tap IN at the reader outside, tap OUT at the station inside (classrooms, for attendance). Only the Hub keeps a free
+// exit sensor. The doors stay open while someone is passing through and close again after the hold time.
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class SlidingDoor : MonoBehaviour
     public Transform reader;                  // marks the OUTSIDE (the reader side)
     public Transform player;
     public float slide = 1.2f, speed = 2.2f, exitSensor = 2.0f;
+    [Tooltip("true: the doors open by themselves for anyone walking out (Hub). false: classrooms - leave by tapping out at the station inside")]
+    public bool freeExit = true;
 
     /// <summary>campus NPCs: they use the exit sensor and keep the doors open while passing, like the player</summary>
     public static readonly List<Transform> Agents = new List<Transform>();
@@ -42,7 +45,7 @@ public class SlidingDoor : MonoBehaviour
         float m = d.magnitude;
         if (m > exitSensor) return;
         bool inside = Vector3.Dot(d, outside) < 0f;
-        if (inside) Open(1.2f);                       // exit sensor: walk out freely
+        if (inside && freeExit) Open(1.2f);           // exit sensor: walk out freely (Hub only)
         else if (open > 0.05f) Open(1.2f);            // stay open while passing through, close ~1 s after
     }
 
