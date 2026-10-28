@@ -51,57 +51,100 @@ The simulations are intended to help evaluate design choices. They do not, by th
 
 ## Repository structure
 
-The README describes the intended project areas. These directories may be added as implementation progresses; the current repository root contains the project documentation and configuration scaffold.
-
 ```text
-Kinecto Charge Project/
-├─ simulation/          MATLAB movement, energy, and power-budget models (planned)
-├─ unity_environment/   Interactive 3D scene and visualizers (planned)
-├─ hardware/            Bill of materials and power-routing details (planned)
-├─ cad/                 FreeCAD design and STL files for the removable pod (planned)
-├─ firmware/            ESP32-C3 sensor and load-control code (planned)
-├─ docs/                HCI research, consent flows, and team contracts (planned)
-├─ env.example          Example local configuration values
-├─ CONTRIBUTING.md      Branching and collaboration guidelines
+KINECTO-CHARGE-2040/
+├─ Kinecto_Virtual_Lab/  Unity Virtual Lab: campus, student avatar, virtual jacket, door readers
+├─ app/                  Kinecto Care companion app (Flutter)
+├─ attendance/           Attendance website (HTML, CSS, JavaScript)
+├─ supabase/             Shared backend: database, live sync and device Edge Functions
+├─ firmware/             ESP32-C3 thermal firmware and Wokwi simulation
+├─ services/             Python fault engine
+├─ jacket-designs/       Jacket concept renders and Blender models (Git LFS)
+├─ docs/                 HCI research, contracts and the live-sync setup guide
+├─ env.example           Example local configuration values
+├─ CONTRIBUTING.md       Branching and collaboration guidelines
 └─ README.md
 ```
 
 ---
 
-## Getting started
+## Running the live demo
 
-### Prerequisites
+The Unity lab, the Kinecto Care app and the Attendance website share one Supabase project, so what happens in one shows up in the others within a few seconds. The connection settings are already in the repository: no accounts, keys or backend setup are needed to run the demo.
 
-- Git
-- MATLAB, for the energy and power-budget simulations
-- Unity Hub and a Unity Editor version compatible with the project, once the Unity project is added
-- FreeCAD, if working on the electronics enclosure
-- PlatformIO-compatible tooling, if working on the planned ESP32-C3 firmware
+### What you need
 
-### 1. Get the repository
+| For | Install |
+| --- | --- |
+| Everything | [Git](https://git-scm.com) and [Git LFS](https://git-lfs.com) (run `git lfs install` once) |
+| Unity lab | [Unity Hub](https://unity.com/download) with Unity Editor **6000.0.73f1** |
+| Kinecto Care app | [Flutter](https://docs.flutter.dev/get-started/install) and an Android emulator (Android Studio) or an Android phone with USB debugging on |
+| Attendance website | [VS Code](https://code.visualstudio.com) with the **Live Server** extension |
 
-Clone the repository using the URL provided by the project team, then move into the project directory:
+All three need an internet connection.
 
-```bash
-git clone <repository-url>
-cd "Kinecto Charge Project"
+### 1. Get the code
+
+```powershell
+git clone https://github.com/DrGitman/KINECTO-CHARGE-2040.git
+cd KINECTO-CHARGE-2040
 ```
 
-### 2. Configure local environment values
+### 2. Unity lab (the virtual jacket)
 
-The repository includes [`env.example`](./env.example) with development and mock-hardware settings. Copy it to `.env` only if your local tools use these variables, then replace example values with the appropriate local configuration:
+1. Unity Hub → **Add → Add project from disk** → choose the `Kinecto_Virtual_Lab` folder. Open it with **6000.0.73f1** (the first import takes a few minutes).
+2. Open the scene `Assets/Kinecto/Scenes/KinectoVirtualLab.unity` and press **Play**.
+3. The HUD shows **App link · sent N** with N counting up: the lab is connected.
 
-```bash
-cp env.example .env
+Controls: **W A S D** move · **Shift** run · **Space** jump · **Q** change comfort mode · **E** tap the cuff at a reader · **Tab** show the panels (weather, comfort, fault buttons).
+
+### 3. Kinecto Care app (phone)
+
+Start an Android emulator or plug in your phone, then:
+
+```powershell
+cd app
+flutter pub get
+flutter run --dart-define-from-file=supabase.json
 ```
 
-On Windows Command Prompt, use `copy env.example .env`; in PowerShell, use `Copy-Item env.example .env`.
+Tap **Sign in** (mock NUST account). Home shows the live jacket, **Comfort** changes its settings, **Faults** lists jacket faults. Without `--dart-define-from-file=supabase.json` the app runs on built-in sample data instead.
 
-Never commit real credentials, student identifiers, passwords, or live network keys. The attendance station URL and API key in the example are placeholders for mock development.
+### 4. Attendance website
 
-### 3. Open the project components
+1. Open the repository folder in VS Code.
+2. Right-click `attendance/index.html` → **Open with Live Server**.
+3. The badge at the bottom right says **Shared register · Live**.
+4. Choose **Lecturer · Dr. Mark** and sign in.
 
-The current scaffold does not yet include runnable MATLAB scripts, a Unity project, CAD files, or firmware. Once those components are added, use the relevant application to open and run them; component-specific commands and tested versions should be documented here.
+### 5. Try it together
+
+| Do this | See this |
+| --- | --- |
+| App → Comfort → choose *Cool*, change a threshold, **Save** | Within about 2 s the Unity HUD shows the new mode and range |
+| Press **Q** in Unity | The app's Comfort screen changes mode by itself |
+| Unity → **Tab** → a fault button (e.g. *Inside sensor offline*) | The app pops up **Jacket fault** and lists it under Faults |
+| Unity → clear all faults | The fault turns *Fixed* in the app |
+| Website → Today → **Open session** (EPH810S lecture), then walk to the E201 door reader in Unity and tap the cuff | The tap appears on the website's Today page straight away, in every open browser |
+| Tap in Unity while the session is closed | The reader turns red and its log says the session is not open |
+
+Only **one person at a time** should run the Unity lab: everyone shares the same virtual jacket (`KC-SIM-0001`).
+
+### Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| Unity HUD says `offline` or `send failed` | Check the internet connection. A `401` means `Assets/StreamingAssets/lab_connection.json` was changed. |
+| Website badge says **Offline** | Check the internet connection and that the page was opened with Live Server, not by double-clicking the file. |
+| App shows sample data, not live data | Run it with `--dart-define-from-file=supabase.json`. |
+| Images or `.blend` files will not open | Git LFS was missing when you cloned: run `git lfs install` then `git lfs pull`. |
+| Nothing updates after a quiet week | The free Supabase project pauses after 7 days without use; the project owner restores it in the Supabase dashboard. |
+
+Backend details, device keys and how to set up a new Supabase project: [docs/live-sync-setup.md](docs/live-sync-setup.md).
+
+### Other local settings
+
+[`env.example`](./env.example) holds development and mock-hardware settings for tools that read a `.env` file (`Copy-Item env.example .env` in PowerShell). Never commit real student identifiers or passwords.
 
 ---
 

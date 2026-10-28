@@ -4,7 +4,7 @@
 // made here (mode key / dashboard) goes back to the app. The real phone app sees this virtual jacket exactly like
 // a real one: live health, real-time fault alerts, comfort settings in sync.
 //
-// Connection details live in StreamingAssets/lab_connection.json (NOT committed; copy lab_connection.example.json).
+// Connection details live in StreamingAssets/lab_connection.json (committed for the team demo; lab_connection.example.json shows the format).
 using System;
 using System.Collections;
 using System.IO;
