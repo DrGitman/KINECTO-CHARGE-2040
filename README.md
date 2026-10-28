@@ -128,6 +128,8 @@ Tap **Sign in** (mock NUST account). Home shows the live jacket, **Comfort** cha
 | Website → Today → **Open session** (EPH810S lecture), then walk to the E201 door reader in Unity and tap the cuff | The tap appears on the website's Today page straight away, in every open browser |
 | Tap in Unity while the session is closed | The reader turns red and its log says the session is not open |
 
+Only the **E201 (EPH810S) classroom** doors are linked to the website: tap in at the reader outside the door and tap out at the station inside. The LT110 and Lab doors work in Unity but are not sent to the website.
+
 Only **one person at a time** should run the Unity lab: everyone shares the same virtual jacket (`KC-SIM-0001`).
 
 ### Troubleshooting

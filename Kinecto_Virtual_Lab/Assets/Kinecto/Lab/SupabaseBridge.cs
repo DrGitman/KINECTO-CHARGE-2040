@@ -13,7 +13,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-[Serializable] public class LabConnection { public string functions_url; public string jacket_id; public string device_key; public float send_every_s = 2f; public bool enabled = true; public string reader_id = "E201-SIM"; public string reader_key; }
+[Serializable] public class LabConnection { public string functions_url; public string jacket_id; public string device_key; public float send_every_s = 2f; public bool enabled = true; public string reader_id = "E201-SIM"; public string reader_key; public string reader_session = "EPH810S"; }
 [Serializable] public class ComfortConfig { public float warm_below_c; public float cool_above_c; public string mode; public string updated_at; }
 [Serializable] class TapPayload { public string reader_id; public string tag_id; public string direction; public string ts; }
 [Serializable] class TapResult { public bool ok; public string message; }
@@ -97,10 +97,12 @@ public class SupabaseBridge : MonoBehaviour
     }
 
     // Called by CuffTapReader: the Unity door reader posts the tap like a real PN532 station would.
+    // Only the room linked to the cloud reader (reader_session, the E201 / EPH810S room) posts; the other
+    // classrooms have no cloud reader, so their taps stay in the lab.
     // onResult gets the server's answer (recorded, or why it was rejected, e.g. session not open).
-    public void SendTap(string tagId, string direction, Action<bool, string> onResult = null)
+    public void SendTap(string tagId, string direction, string roomSession, Action<bool, string> onResult = null)
     {
-        if (cfg == null || !cfg.enabled || string.IsNullOrEmpty(cfg.reader_key)) return;
+        if (cfg == null || !cfg.enabled || string.IsNullOrEmpty(cfg.reader_key) || roomSession != cfg.reader_session) return;
         StartCoroutine(PostTap(new TapPayload { reader_id = cfg.reader_id, tag_id = tagId, direction = direction, ts = DateTime.UtcNow.ToString("o") }, onResult));
     }
 
