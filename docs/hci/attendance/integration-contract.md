@@ -1,45 +1,49 @@
 # Unity to Attendance website: integration contract
 
-## Current implementation
+## How it works now
 
-The website has two independent modes. **Local demo** keeps its browser-based Tap Station and records. **API polling** (optional) uses `attendance/integration.js` to GET validated attendance events from a backend every 5 seconds. Both modes write accepted events into the same local attendance store, so the Lecturer Today/Register, Student My Attendance, and Admin Audit log can display them.
+Unity never talks to the website. Both talk to the shared Supabase project:
 
-**Not implemented here:** a public POST endpoint, database, Unity bridge, secure authentication, server-side validation, Supabase realtime, or cross-device shared data. The browser cannot receive a POST directly from Unity. Do not configure Unity to POST to the website or GitHub Pages.
-
-## Unity -> backend
-
-The existing Unity bridge uses `reader_id`, `tag_id`, `direction`, and `ts`:
-
-```json
-{"reader_id":"E201-SIM","tag_id":"MOCK-TAG-0187","direction":"IN","ts":"2026-10-28T10:00:00Z","session_id":"EPH810S-LECT-01"}
+```
+Unity door reader (E201-SIM)  --POST-->  Edge Function attendance-ingest  -->  record_tap()  -->  attendance_events / tap_attempts
+                                                                                                         |
+Attendance website  <-----------------------  Supabase Realtime  <---------------------------------------+
 ```
 
-`session_id` is strongly recommended. If it is missing, the browser imports only when exactly one open session matches the reader and student module. The backend should resolve the session authoritatively, not rely on this demo fallback.
+1. Unity posts the tap to `functions/v1/attendance-ingest` with its reader key (`x-reader-key`).
+2. The function calls `record_tap(p_tag, p_direction, p_reader_id, p_session_id, p_source)`. The database decides whether the tap is accepted: the tag must belong to a student, the reader must have exactly one open session, and the student must take that course.
+3. Every attempt, accepted or rejected, goes into `tap_attempts`. Accepted taps also go into `attendance_events`. The reader's `last_seen` is updated.
+4. Every open website receives the new rows through Realtime and updates Today, the Register, Reports and the reader pages within about a second.
 
-## Backend -> website
+The website keeps no attendance data of its own. A refresh shows exactly what is in the database.
 
-Expose an HTTPS **GET** endpoint returning an array or an object with `events` array, containing only **accepted, server-validated** taps:
+## Unity request
 
 ```json
-{
-  "events": [
-    {"id":"evt-001","reader_id":"E201-SIM","tag_id":"MOCK-TAG-0187","direction":"IN","ts":"2026-10-28T10:00:00Z","session_id":"EPH810S-LECT-01"},
-    {"id":"evt-002","reader_id":"E201-SIM","tag_id":"MOCK-TAG-0187","direction":"OUT","ts":"2026-10-28T12:00:00Z","session_id":"EPH810S-LECT-01"}
-  ]
-}
+{"reader_id":"E201-SIM","tag_id":"MOCK-0187","direction":"IN","ts":"2026-10-30T10:02:00Z"}
 ```
 
-The browser supports camelCase aliases, checks direction and timestamps, maps the mock tag to a sample student, rejects ambiguous session mapping, and prevents duplicate imports. It never uses the browser's selected session as a fallback. It requires the corresponding session to be **open in the local demo state**. This is a prototype limitation: a real backend should also synchronize sessions and roster information. The API must set CORS for the website's origin.
+`session_id` is optional. Without it, the database uses the one session that is open at that reader.
 
-## To connect
+## Responses
 
-1. Run the site using Live Server, not `file://`.
-2. Lecturer or Admin -> Settings -> Unity attendance integration.
-3. Paste the backend's HTTPS GET events feed URL, enable fetching, and Save connection.
-4. Open the corresponding session in the demo website. Send a validated event to the backend from Unity or an API test client.
-5. Check Lecturer Today/Register, Student My Attendance, Admin Audit log. Use the same browser for switching roles.
-6. If the backend is unavailable, disable fetching and continue local Tap Station demonstrations.
+| Result | Meaning | Shown on the website |
+| --- | --- | --- |
+| `ok: true` | Tap recorded | Live taps (green), Register: Present or Late |
+| `Tap IN already recorded for this session.` | Same student, same session, same direction | Live taps, counted as a duplicate in tap quality |
+| `No open session at this reader for this student.` | No session open at that reader, or the student does not take that course | Live taps (Rejected), reader detail |
+| `More than one open session at this reader.` | Two sessions open in one room (the website blocks this) | Live taps (Rejected) |
+| `Unknown tag.` | The tag is not linked to a student | Live taps (Rejected) |
+
+## Test without Unity
+
+```bash
+curl -X POST "https://iqlhmjmzcgbmofrujprt.supabase.co/functions/v1/attendance-ingest" \
+  -H "Content-Type: application/json" \
+  -H "x-reader-key: <reader key from Kinecto_Virtual_Lab/Assets/StreamingAssets/lab_connection.json>" \
+  -d '{"reader_id":"E201-SIM","tag_id":"MOCK-0187","direction":"IN"}'
+```
 
 ## Security before production
 
-The role selector is not authentication, and `localStorage` is not a secure database. Do not use real student records or expose a private API key in frontend code. The production backend must authenticate Unity devices, validate tag ownership and session/reader mappings, enforce permissions, handle rejected taps and corrections, and provide authenticated, role-filtered API responses. A shared database and proper authorization are needed for multi-device operation.
+The website uses demo sign-in codes and open demo database policies with mock students. Before real student data: Supabase Auth with NUST accounts, per-role row-level security, one key per physical reader stored outside the repository, and moving the reader key out of `lab_connection.json`.

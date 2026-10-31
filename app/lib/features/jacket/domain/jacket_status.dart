@@ -1,4 +1,6 @@
-/// Latest snapshot of the paired jacket, as shown on Home.
+import '../../comfort/domain/comfort_settings.dart';
+
+/// Latest snapshot of the paired jacket (jacket_status), as the Virtual Lab or a real jacket reports it.
 class JacketStatus {
   const JacketStatus({
     required this.jacketId,
@@ -13,6 +15,10 @@ class JacketStatus {
     this.blowerOn = false,
     this.harvestedMj,
     this.activity,
+    this.bufferVolts,
+    this.batteryTempC,
+    this.mode,
+    this.faultFlags = const [],
   });
 
   final String jacketId;
@@ -24,10 +30,14 @@ class JacketStatus {
   final bool cuffTagReadable;
   final bool isSimulated;
 
-  // Live readings the Virtual Lab jacket also reports; null when not known.
   final double? outsideC;
   final bool heaterOn;
   final bool blowerOn;
   final double? harvestedMj;
   final String? activity;
+  final double? bufferVolts;
+  final double? batteryTempC;
+  // The mode the jacket is running right now (a heater fault can force it).
+  final ComfortMode? mode;
+  final List<String> faultFlags;
 }

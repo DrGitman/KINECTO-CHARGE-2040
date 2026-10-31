@@ -16,7 +16,7 @@ final comfortRepositoryProvider = Provider<ComfortRepository>(
   (ref) => Backend.connected
       ? SupabaseComfortRepository(
           ref.watch(supabaseClientProvider),
-          Backend.jacketId,
+          ref.watch(jacketIdProvider),
         )
       : MockComfortRepository(ref.watch(clockProvider)),
 );

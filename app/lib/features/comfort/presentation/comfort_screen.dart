@@ -6,7 +6,10 @@ import '../../../core/clock.dart';
 import '../../../core/formatting/date_labels.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/load_error_view.dart';
-import '../../../core/widgets/simulated_badge.dart';
+import '../../../core/router/app_routes.dart';
+import '../../../core/widgets/kc_widgets.dart';
+import '../../jacket/presentation/jacket_providers.dart';
+import 'package:go_router/go_router.dart';
 import '../domain/comfort_limits.dart';
 import '../domain/comfort_settings.dart';
 import 'comfort_controller.dart';
@@ -23,17 +26,28 @@ class ComfortScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final editor = ref.watch(comfortControllerProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppStrings.comfortTitle),
-        actions: const [
-          Padding(padding: EdgeInsets.only(right: 16), child: SimulatedBadge()),
-        ],
-      ),
-      body: editor.when(
-        data: (editor) => _ComfortForm(editor: editor),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, _) => LoadErrorView(
-          onRetry: () => ref.invalidate(comfortControllerProvider),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            PageHeader(
+              title: AppStrings.comfortTitle,
+              action: CircleIconButton(
+                icon: Icons.show_chart,
+                tooltip: AppStrings.insideVsOutside,
+                onPressed: () => context.go(AppRoutes.comfortToday),
+              ),
+            ),
+            Expanded(
+              child: editor.when(
+                data: (editor) => _ComfortForm(editor: editor),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (_, _) => LoadErrorView(
+                  onRetry: () => ref.invalidate(comfortControllerProvider),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -52,12 +66,28 @@ class _ComfortForm extends ConsumerWidget {
     final controller = ref.read(comfortControllerProvider.notifier);
     final draft = editor.draft;
     final insideC = ref.watch(insideReadingProvider).value;
-    final now = ref.watch(clockProvider)();
+    final now = ref.watch(currentTimeProvider);
+    final online = ref.watch(jacketOnlineProvider);
     final small = Theme.of(context).textTheme.bodySmall;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
       children: [
+        if (!online) ...[
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF4DB),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: AppColors.gold),
+            ),
+            child: Text(
+              AppStrings.comfortOfflineBanner,
+              style: small?.copyWith(color: AppColors.navy, fontWeight: FontWeight.w600),
+            ),
+          ),
+          const SizedBox(height: _gap),
+        ],
         ModeSelector(selected: draft.mode, onChanged: controller.selectMode),
         const SizedBox(height: _gap),
         Container(
@@ -142,8 +172,8 @@ class _ComfortForm extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          AppStrings.savedAgo(DateLabels.timeAgo(editor.saved.updatedAt, now)),
-          style: small,
+          AppStrings.syncedAgo(DateLabels.timeAgo(editor.saved.updatedAt, now)),
+          style: small?.copyWith(color: const Color(0xFF2EA043), fontWeight: FontWeight.w600),
           textAlign: TextAlign.center,
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,113 +8,185 @@ import '../../../core/clock.dart';
 import '../../../core/formatting/date_labels.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/kc_widgets.dart';
 import '../../../core/widgets/load_error_view.dart';
 import '../../../core/widgets/tab_page.dart';
-import '../../comfort/domain/comfort_settings.dart';
+import '../../auth/presentation/auth_controller.dart';
 import '../../comfort/presentation/comfort_controller.dart';
 import '../../comfort/presentation/comfort_copy.dart';
 import '../../faults/domain/fault.dart';
 import '../../faults/presentation/faults_controller.dart';
 import '../../jacket/domain/jacket_status.dart';
 import '../../jacket/presentation/jacket_providers.dart';
-import 'widgets/comfort_battery_gauge.dart';
+import '../../notifications/notifications.dart';
 import 'widgets/home_header.dart';
+import 'widgets/jacket_health_gauge.dart';
 import 'widgets/status_tile.dart';
 
-/// Comfort battery gauge plus four tiles (board 04, screen 8).
+/// Jacket health gauge and four tiles (board 04, Home). Everything here follows the live
+/// jacket_status row, so a change in the Unity lab shows up within about a second.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(jacketStatusProvider);
-    final openFaults = ref.watch(openFaultsProvider);
-    final now = ref.watch(clockProvider)();
-
-    return SafeArea(
-      bottom: false,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
       child: status.when(
-        data: (jacket) => ListView(
-          padding: TabPage.listPadding,
-          children: [
-            HomeHeader(
-              now: now,
-              openFaultCount: openFaults.length,
-              jacketId: jacket.jacketId,
-            ),
-            const SizedBox(height: 12),
-            _GaugeCard(jacket: jacket, now: now),
-            const SizedBox(height: 12),
-            _Tiles(
-              jacket: jacket,
-              openFaults: openFaults,
-              comfortMode: ref
-                  .watch(comfortControllerProvider)
-                  .value
-                  ?.saved
-                  .mode,
-            ),
-            const SizedBox(height: 12),
-            _LiveCard(jacket: jacket),
-          ],
-        ),
+        data: (jacket) => ref.watch(jacketOnlineProvider)
+            ? _LiveHome(jacket: jacket)
+            : _OfflineHome(jacket: jacket),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, _) =>
-            LoadErrorView(onRetry: () => ref.invalidate(jacketStatusProvider)),
+        error: (_, _) => SafeArea(
+          child: LoadErrorView(onRetry: () => ref.invalidate(jacketStatusProvider)),
+        ),
       ),
     );
   }
 }
 
-class _GaugeCard extends StatelessWidget {
-  const _GaugeCard({required this.jacket, required this.now});
+class _LiveHome extends ConsumerWidget {
+  const _LiveHome({required this.jacket});
 
   final JacketStatus jacket;
-  final DateTime now;
 
   @override
-  Widget build(BuildContext context) {
-    final small = Theme.of(context).textTheme.bodySmall;
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final now = ref.watch(currentTimeProvider);
+    final openFaults = ref.watch(openFaultsProvider);
+    final session = ref.watch(authControllerProvider);
+    final comfortMode = ref.watch(comfortControllerProvider).value?.saved.mode;
+    final health = jacketHealth(
+      batteryPercent: jacket.comfortBatteryPercent,
+      bufferPercent: jacket.energyBufferPercent,
+      openFaults: openFaults.length,
+    );
+
+    return ListView(
+      padding: const EdgeInsets.only(bottom: TabPage.bottomInset),
+      children: [
+        HomeHeader(
+          now: now,
+          name: session?.greetingName ?? '',
+          openFaultCount: openFaults.length,
+          jacketLabel: AppStrings.pairedJacket(jacket.jacketId),
+          unread: ref.watch(unreadNotificationsProvider),
+          onBell: () => context.go(AppRoutes.notifications),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(TabPage.sidePadding, 16, TabPage.sidePadding, 0),
+          child: Column(
+            children: [
+              KcCard(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                radius: 32,
+                onTap: () => context.push(AppRoutes.pod),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        _AgoPill(label: DateLabels.timeAgo(jacket.updatedAt, now)),
+                        const Spacer(),
+                        CircleIconButton(
+                          icon: Icons.more_vert,
+                          tooltip: AppStrings.jacketDetails,
+                          size: 40,
+                          background: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          onPressed: () => _showDetails(context),
+                        ),
+                      ],
+                    ),
+                    JacketHealthGauge(percent: health, caption: AppStrings.jacketHealth),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(AppStrings.gaugeLow, style: Theme.of(context).textTheme.bodySmall),
+                        Text(AppStrings.gaugeFull, style: Theme.of(context).textTheme.bodySmall),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              _Tiles(jacket: jacket, openFaults: openFaults, comfortModeLabel: comfortMode == null
+                  ? AppStrings.noReading
+                  : ComfortCopy.modeLabel(comfortMode)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showDetails(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheet) => SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                const Icon(Icons.schedule, size: 16),
-                const SizedBox(width: 6),
-                Text(DateLabels.timeAgo(jacket.updatedAt, now), style: small),
-              ],
-            ),
-            ComfortBatteryGauge(percent: jacket.comfortBatteryPercent),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(AppStrings.gaugeLow, style: small),
-                Text(AppStrings.gaugeFull, style: small),
-              ],
-            ),
+            for (final (icon, label, route) in [
+              (Icons.battery_charging_full, AppStrings.podTitle, AppRoutes.pod),
+              (Icons.bolt, AppStrings.energyTitle, AppRoutes.energy),
+              (Icons.thermostat_outlined, AppStrings.comfortTitle, AppRoutes.comfortToday),
+              (Icons.contactless_outlined, AppStrings.cuffTagTile, AppRoutes.cuff),
+            ])
+              ListTile(
+                leading: Icon(icon),
+                title: Text(label),
+                onTap: () {
+                  Navigator.of(sheet).pop();
+                  if (route.startsWith(AppRoutes.home)) {
+                    context.go(route);
+                  } else {
+                    context.push(route);
+                  }
+                },
+              ),
           ],
         ),
       ),
     );
   }
+}
+
+class _AgoPill extends StatelessWidget {
+  const _AgoPill({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+    decoration: ShapeDecoration(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      shape: const StadiumBorder(),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.schedule, size: 16),
+        const SizedBox(width: 6),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
+      ],
+    ),
+  );
 }
 
 class _Tiles extends StatelessWidget {
   const _Tiles({
     required this.jacket,
     required this.openFaults,
-    required this.comfortMode,
+    required this.comfortModeLabel,
   });
 
   static const double _gap = 10;
 
   final JacketStatus jacket;
   final List<Fault> openFaults;
-  final ComfortMode? comfortMode;
+  final String comfortModeLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -123,23 +196,21 @@ class _Tiles extends StatelessWidget {
         icon: Icons.bolt,
         label: AppStrings.energyBufferTile,
         value: '${jacket.energyBufferPercent}%',
+        onTap: () => context.go(AppRoutes.energy),
       ),
       StatusTile(
         color: AppColors.comfortTile,
         icon: Icons.thermostat_outlined,
         label: AppStrings.comfortTile,
-        value: comfortMode == null
-            ? AppStrings.noReading
-            : ComfortCopy.modeLabel(comfortMode!),
-        onTap: () => context.push(AppRoutes.comfort),
+        value: comfortModeLabel,
+        onTap: () => context.go(AppRoutes.comfortToday),
       ),
       StatusTile(
         color: AppColors.cuffTile,
         icon: Icons.contactless_outlined,
         label: AppStrings.cuffTagTile,
-        value: jacket.cuffTagReadable
-            ? AppStrings.cuffReady
-            : AppStrings.cuffNeedsCheck,
+        value: jacket.cuffTagReadable ? AppStrings.cuffReady : AppStrings.cuffNeedsCheck,
+        onTap: () => context.push(AppRoutes.cuff),
       ),
       StatusTile(
         color: openFaults.isEmpty ? AppColors.okTile : AppColors.faultTile,
@@ -149,7 +220,6 @@ class _Tiles extends StatelessWidget {
         onTap: () => _openFaults(context),
       ),
     ];
-    // Rows keep their natural height, so large system text never clips.
     return Column(
       children: [
         _row(tiles[0], tiles[1]),
@@ -180,85 +250,105 @@ class _Tiles extends StatelessWidget {
   }
 }
 
-/// What the jacket is doing right now, as the Virtual Lab reports it.
-class _LiveCard extends StatelessWidget {
-  const _LiveCard({required this.jacket});
+/// No report for 2 minutes (board 04b, Jacket not connected).
+class _OfflineHome extends ConsumerWidget {
+  const _OfflineHome({required this.jacket});
 
   final JacketStatus jacket;
 
   @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final outside = jacket.outsideC;
-    final harvested = jacket.harvestedMj;
-    final rows = [
-      (
-        Icons.whatshot_outlined,
-        AppStrings.heaterFanLabel,
-        jacket.heaterOn
-            ? AppStrings.heatingNow
-            : jacket.blowerOn
-            ? AppStrings.coolingNow
-            : AppStrings.idleNow,
-      ),
-      (
-        Icons.wb_sunny_outlined,
-        AppStrings.outsideLabel,
-        outside == null
-            ? AppStrings.noReading
-            : '${outside.toStringAsFixed(0)} °C',
-      ),
-      (
-        Icons.bolt,
-        AppStrings.harvestedLabel,
-        harvested == null
-            ? AppStrings.noReading
-            : '${harvested.toStringAsFixed(2)} mJ',
-      ),
-      (
-        Icons.directions_walk,
-        AppStrings.activityLabel,
-        _activity(jacket.activity),
-      ),
-    ];
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final text = Theme.of(context).textTheme;
+    final openFaults = ref.watch(openFaultsProvider);
+    final health = jacketHealth(
+      batteryPercent: jacket.comfortBatteryPercent,
+      bufferPercent: jacket.energyBufferPercent,
+      openFaults: openFaults.length,
+    );
+    final steps = jacket.isSimulated
+        ? const [
+            (Icons.play_arrow_rounded, AppStrings.reconnectUnity),
+            (Icons.wifi, AppStrings.reconnectInternet),
+            (Icons.power_settings_new, AppStrings.reconnectPod),
+          ]
+        : const [
+            (Icons.bluetooth, AppStrings.reconnectBluetooth),
+            (Icons.power_settings_new, AppStrings.reconnectPod),
+            (Icons.contactless_outlined, AppStrings.reconnectCuff),
+          ];
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: SafeArea(
+        bottom: false,
+        child: ListView(
+          padding: TabPage.listPadding,
           children: [
-            Text(AppStrings.liveFromJacket, style: textTheme.titleSmall),
-            const SizedBox(height: 8),
-            for (final (icon, label, value) in rows)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    Icon(icon, size: 18),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(label, style: textTheme.bodyMedium)),
-                    Text(
-                      value,
-                      style: textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+            Text(AppStrings.homeTab, style: text.headlineMedium?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF4DB),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.gold),
+              ),
+              child: Row(
+                children: [
+                  Icon(jacket.isSimulated ? Icons.cloud_off : Icons.bluetooth_disabled,
+                      color: const Color(0xFF8A5A00)),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(AppStrings.jacketNotInRange,
+                            style: text.titleSmall?.copyWith(fontWeight: FontWeight.w700, color: AppColors.navy)),
+                        Text(AppStrings.lastReadingFrom(_hhmm(jacket.updatedAt)),
+                            style: text.bodySmall?.copyWith(color: AppColors.navy)),
+                      ],
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            KcCard(
+              radius: 32,
+              padding: const EdgeInsets.symmetric(vertical: 28),
+              child: Center(
+                child: JacketHealthGauge(percent: health, caption: AppStrings.lastKnown, muted: true, size: 200),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(AppStrings.howToReconnect, style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 10),
+            for (final (icon, label) in steps)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: KcCard(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  radius: 20,
+                  child: Row(
+                    children: [
+                      IconBubble(icon: icon, size: 36, background: AppColors.cuffTile),
+                      const SizedBox(width: 14),
+                      Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600))),
+                    ],
+                  ),
                 ),
               ),
+            const SizedBox(height: 6),
+            FilledButton(
+              style: FilledButton.styleFrom(backgroundColor: AppColors.navy, foregroundColor: Colors.white),
+              onPressed: () => ref.invalidate(jacketStatusProvider),
+              child: const Text(AppStrings.tryAgain),
+            ),
           ],
         ),
       ),
     );
   }
 
-  static String _activity(String? activity) => switch (activity) {
-    null || '' => AppStrings.noReading,
-    'walk' => 'Walking',
-    'run' => 'Running',
-    'standing' => 'Standing',
-    'seated' => 'Seated',
-    final String other => other,
-  };
+  static String _hhmm(DateTime t) =>
+      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 }

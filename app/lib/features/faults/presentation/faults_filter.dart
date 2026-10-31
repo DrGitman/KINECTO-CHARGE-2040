@@ -33,6 +33,9 @@ class FaultsFilterController extends Notifier<FaultsFilter> {
   void showSubsystem(FaultSubsystem? subsystem) =>
       state = FaultsFilter(month: state.month, subsystem: subsystem);
 
+  void showMonth(DateTime month) =>
+      state = FaultsFilter(month: DateTime(month.year, month.month), subsystem: state.subsystem);
+
   void shiftMonth(int months) => state = FaultsFilter(
     month: DateTime(state.month.year, state.month.month + months),
     subsystem: state.subsystem,

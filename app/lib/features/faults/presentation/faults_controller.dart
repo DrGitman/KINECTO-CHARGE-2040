@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/backend.dart';
 import '../../../core/clock.dart';
+import '../../jacket/presentation/jacket_providers.dart';
 import '../data/mock_fault_repository.dart';
 import '../data/supabase_fault_repository.dart';
 import '../domain/fault.dart';
@@ -12,7 +13,7 @@ final faultRepositoryProvider = Provider<FaultRepository>(
   (ref) => Backend.connected
       ? SupabaseFaultRepository(
           ref.watch(supabaseClientProvider),
-          Backend.jacketId,
+          ref.watch(jacketIdProvider),
         )
       : MockFaultRepository(ref.watch(clockProvider)),
 );
