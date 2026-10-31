@@ -17,7 +17,7 @@ class AppShell extends ConsumerWidget {
 
   static const List<FloatingTabItem> tabs = [
     FloatingTabItem(AppStrings.homeTab, Icons.home_outlined),
-    FloatingTabItem(AppStrings.faultsTab, Icons.show_chart),
+    FloatingTabItem(AppStrings.faultsTab, Icons.monitor_heart_outlined),
     FloatingTabItem(AppStrings.repairsTab, Icons.build_outlined),
     FloatingTabItem(AppStrings.profileTab, Icons.person_outline),
   ];

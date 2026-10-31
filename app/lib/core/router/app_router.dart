@@ -4,10 +4,16 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/auth_controller.dart';
 import '../../features/auth/presentation/sign_in_screen.dart';
+import '../../features/auth/presentation/verify_code_screen.dart';
 import '../../features/comfort/presentation/comfort_screen.dart';
+import '../../features/comfort/presentation/comfort_today_screen.dart';
 import '../../features/faults/presentation/fault_detail_screen.dart';
 import '../../features/faults/presentation/faults_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/jacket/presentation/cuff_tag_screen.dart';
+import '../../features/jacket/presentation/energy_screen.dart';
+import '../../features/jacket/presentation/pod_screen.dart';
+import '../../features/notifications/notifications_screen.dart';
 import '../../features/profile/presentation/help_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/settings/presentation/notification_settings_screen.dart';
@@ -19,46 +25,51 @@ import 'app_routes.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   // Bridges Riverpod auth state to go_router so redirects rerun on sign-in and sign-out.
-  final isSignedIn = ValueNotifier<bool>(
-    ref.read(authControllerProvider) != null,
-  );
-  ref.listen(
-    authControllerProvider,
-    (_, session) => isSignedIn.value = session != null,
-  );
+  final isSignedIn = ValueNotifier<bool>(ref.read(authControllerProvider) != null);
+  ref.listen(authControllerProvider, (_, session) => isSignedIn.value = session != null);
 
   final router = GoRouter(
     initialLocation: AppRoutes.home,
     refreshListenable: isSignedIn,
-    redirect: (_, state) => resolveRedirect(
-      isSignedIn: isSignedIn.value,
-      location: state.matchedLocation,
-    ),
+    redirect: (_, state) => resolveRedirect(isSignedIn: isSignedIn.value, location: state.matchedLocation),
     routes: [
       GoRoute(path: AppRoutes.signIn, builder: (_, _) => const SignInScreen()),
       GoRoute(
-        path: AppRoutes.comfort,
-        builder: (_, _) => const ComfortScreen(),
+        path: AppRoutes.verifyCode,
+        builder: (_, state) {
+          final extra = state.extra;
+          if (extra is ({String email, String code})) {
+            return VerifyCodeScreen(email: extra.email, code: extra.code);
+          }
+          return const SignInScreen();
+        },
       ),
-      GoRoute(
-        path: AppRoutes.notificationSettings,
-        builder: (_, _) => const NotificationSettingsScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.themeSettings,
-        builder: (_, _) => const ThemeSettingsScreen(),
-      ),
+      GoRoute(path: AppRoutes.comfort, builder: (_, _) => const ComfortScreen()),
+      GoRoute(path: AppRoutes.cuff, builder: (_, _) => const CuffTagScreen()),
+      GoRoute(path: AppRoutes.pod, builder: (_, _) => const PodScreen()),
+      GoRoute(path: AppRoutes.notificationSettings, builder: (_, _) => const NotificationSettingsScreen()),
+      GoRoute(path: AppRoutes.themeSettings, builder: (_, _) => const ThemeSettingsScreen()),
       GoRoute(path: AppRoutes.help, builder: (_, _) => const HelpScreen()),
       GoRoute(
         path: AppRoutes.faultDetail,
-        builder: (_, state) =>
-            FaultDetailScreen(faultId: state.pathParameters['id']!),
+        builder: (_, state) => FaultDetailScreen(faultId: state.pathParameters['id']!),
       ),
       StatefulShellRoute.indexedStack(
-        builder: (_, _, navigationShell) =>
-            AppShell(navigationShell: navigationShell),
+        builder: (_, _, navigationShell) => AppShell(navigationShell: navigationShell),
         branches: [
-          _tab(AppRoutes.home, const HomeScreen()),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                builder: (_, _) => const HomeScreen(),
+                routes: [
+                  GoRoute(path: 'notifications', builder: (_, _) => const NotificationsScreen()),
+                  GoRoute(path: 'energy', builder: (_, _) => const EnergyScreen()),
+                  GoRoute(path: 'comfort', builder: (_, _) => const ComfortTodayScreen()),
+                ],
+              ),
+            ],
+          ),
           _tab(AppRoutes.faults, const FaultsScreen()),
           // Placeholder only: the repairs feature belongs to Member C (app-dev/repairs-*).
           _tab(

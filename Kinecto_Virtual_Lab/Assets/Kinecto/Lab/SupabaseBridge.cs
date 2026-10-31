@@ -82,9 +82,19 @@ public class SupabaseBridge : MonoBehaviour
                 }
                 else lastStatus = $"send failed: {req.error}";
             }
-            yield return new WaitForSeconds(cfg.send_every_s);
+            // Wait for the next regular send, but go at once when something the app shows changes here
+            // (mode, a fault, heater or fan, the cuff tag, what the wearer is doing), so the phone reacts straight away.
+            // A short send at least every second also picks up comfort changes made in the app.
+            string sentState = StateSignature();
+            float waited = 0f, every = Mathf.Max(1f, cfg.send_every_s);
+            while (waited < every && StateSignature() == sentState) { yield return new WaitForSeconds(0.1f); waited += 0.1f; }
         }
     }
+
+    // The things the phone app reacts to. Temperatures are rounded so normal drift does not cause extra sends.
+    string StateSignature() =>
+        $"{thermal.mode}|{thermal.heaterOn}|{thermal.blowerOn}|{thermal.sensorFault}|{faults.cuffTagReadable}|" +
+        $"{string.Join(",", faults.ActiveFlags)}|{lab.CurrentActivity}|{Mathf.Round(thermal.insideC)}|{Mathf.Round(thermal.ambientC)}";
 
     // Comfort settings changed in the real app reach the virtual jacket (like the BLE comfort_settings write).
     void ApplyConfig(string body)

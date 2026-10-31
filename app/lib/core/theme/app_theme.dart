@@ -38,6 +38,7 @@ abstract final class AppTheme {
     return ThemeData(
       colorScheme: colorScheme,
       useMaterial3: true,
+      fontFamily: 'PlusJakartaSans',
       scaffoldBackgroundColor: scaffold,
       appBarTheme: AppBarTheme(
         backgroundColor: scaffold,

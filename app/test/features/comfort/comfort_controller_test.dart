@@ -57,6 +57,7 @@ void main() {
   });
 
   test('inside reading is hidden while the sensor fault is open', () async {
+    container.listen(insideReadingProvider, (_, _) {});
     expect(await container.read(insideReadingProvider.future), isNull);
 
     final open = (await container.read(
