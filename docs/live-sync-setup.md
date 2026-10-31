@@ -123,7 +123,7 @@ Unity proves who it is with two keys: one for the virtual jacket and one for the
 1. **App → Unity:** Care app → Comfort → mode *Cool*, warm-below 20 °C → Save. Within about 2 s the Unity HUD shows Cool and the range *20 – 26 °C · set in phone app*.
 2. **Unity → App:** press the mode key in Unity. The Care app's Comfort screen changes mode by itself.
 3. **Fault alert:** in Unity, inject *Inside sensor offline*. The Care app shows **Jacket fault: Inside sensor offline**; tap **View**. In Unity, *Clear all*. The fault becomes *Fixed* in the app.
-4. **Attendance:** website → sign in as Dr. Mark → Today → *EPH810S Lecture* → **Open session**. In Unity, walk to the E201 door reader and hold the cuff there. The tap appears under *Live taps*. Open the site in a second browser to see both update together.
+4. **Attendance:** website → sign in as `m.kandjii@nust.na` → Today → *EPH810S Lecture* → **Open session**. In Unity, walk to the E201 door reader and hold the cuff there. The tap appears under *Live taps*. Open the site in a second browser to see both update together.
 5. **Rejection path:** close the session on the website, tap again in Unity. The reader light goes red and its log says the session is not open.
 
 ## Troubleshooting

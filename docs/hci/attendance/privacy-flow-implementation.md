@@ -3,7 +3,7 @@
 ## 1. Intentional NFC tap
 A student deliberately presents a passive cuff tag to a classroom reader. A valid tap is associated with a reader, active session and student registration. No continuous location, movement, temperature or energy history is collected by attendance.
 
-**Prototype:** Tap Station generates local mock events. **Not implemented:** real reader, secure server validation or Unity-to-browser live feed.
+**Prototype:** the Unity door reader sends mock taps to Supabase, the database checks them and the website shows them live. **Not implemented:** a physical reader and real NUST sign-in.
 
 ## 2. Student access and attendance query
 The student role displays only the sample student’s own records and registered modules. A student can submit a session-specific message to the lecturer but cannot mark attendance or edit records.

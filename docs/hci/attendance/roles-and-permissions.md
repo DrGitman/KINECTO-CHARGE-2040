@@ -2,7 +2,7 @@
 
 ## Lecturer
 
-A lecturer can view assigned sessions, open or close a session, review attendance, export a register, answer student queries and correct a missed tap with a recorded reason. Dr. Mark is the sample lecturer.
+A lecturer can view assigned sessions, open or close a session, review attendance, export a register, answer student queries and correct a missed tap with a recorded reason. Dr M. Kandjii (`m.kandjii@nust.na`) is the sample lecturer, P. Shikongo the sample admin and `tutor.eph@nust.na` a teaching assistant, who can open and close sessions but not mark students by hand.
 
 ## Student
 

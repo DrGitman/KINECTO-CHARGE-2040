@@ -18,7 +18,7 @@ If the tag cannot be read, the lecturer can mark the student present by hand. Th
 
 ## Three ways to test or record a tap
 
-The browser Tap Station lets us choose a sample tag and press Tap IN or Tap OUT. Unity simulates the cuff moving close to a classroom reader. A physical NFC reader is planned for later. All three should eventually use the same backend validation rules.
+Unity simulates the cuff moving close to a classroom reader. A test request (see `integration-contract.md`) does the same without Unity. A physical NFC reader is planned for later. All of them go through the same database check, `record_tap`.
 
 ## Current state
 
